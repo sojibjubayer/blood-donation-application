@@ -5,6 +5,11 @@ import Main from "../layout/Main";
 import Home from "../pages/Home/Home";
 import Register from "../Register/Register";
 import Login from "../pages/Login/Login";
+import PrivateRoute from "./PrivateRoute";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import UserHome from "../pages/Dashboard/UserHome/UserHome";
+import AdminRoute from "./AdminRoute";
+import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
 
 
 
@@ -26,6 +31,55 @@ import Login from "../pages/Login/Login";
           element:<Login></Login>
         }
         
+      ]
+    },
+
+    {
+      path: 'dashboard',
+      element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
+      children: [
+        //normal user routes
+        {
+          path:'userHome',
+          element:<UserHome></UserHome>
+
+        },
+        // {
+        //   path: 'cart',
+        //   element: <Cart></Cart>
+        // },
+        // {
+        //   path:'payment',
+        //   element:<Payment></Payment>
+        // },
+        // {
+        //   path:'paymentHistory',
+        //   element:<PaymentHistory></PaymentHistory>
+        // },
+
+
+        //admin only routes
+        {
+          path:'adminHome',
+          element:<AdminRoute><AdminHome></AdminHome></AdminRoute>
+        },
+        // {
+        //   path: 'updateItem/:id',
+        //   element: <AdminRoute><UpdateItem></UpdateItem></AdminRoute>,
+        //   loader: ({params}) => fetch(`http://localhost:5000/menu/${params.id}`)
+        // },
+        // {
+        //   path:'manageItems',
+        //   element:<AdminRoute><ManageItems></ManageItems></AdminRoute>
+        // },
+        // {
+        //   path:'addItems',
+        //   element:<AdminRoute><AddItems></AddItems></AdminRoute>
+        // },
+        // {
+        //   path:'users',
+        //   element:<AdminRoute><AllUsers></AllUsers></AdminRoute>
+        // }
       ]
     }
   ]);

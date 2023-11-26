@@ -1,39 +1,40 @@
-// import { useContext } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-// import { AuthContext } from "../../../providers/AuthProvider";
+import { AuthContext } from "../../../providers/AuthProvider";
+
 // import { FaShoppingCart } from 'react-icons/fa';
-// import useAdmin from "../../../hooks/useAdmin";
+import useAdmin from "../../../hooks/useAdmin";
 import logo from '../../../assets/logo1.png'
 
 const NavBar = () => {
-    // const { user, logOut } = useContext(AuthContext);
-    // const [isAdmin] = useAdmin()
+    const { user, logOut } = useContext(AuthContext);
+    const [isAdmin] = useAdmin()
 
-    // const handleLogOut = () => {
-    //     logOut()
-    //         .then(() => { })
-    //         .catch(error => console.log(error));
-    // }
+    const handleLogOut = () => {
+        logOut()
+            .then(() => { })
+            .catch(error => console.log(error));
+    }
 
     const navOptions = <>
         <li><Link to="/donationRequest">Donation Request</Link></li>
         <li><Link to="/blog">Blog</Link></li>
-        <li><Link to="/login">Login</Link></li>
-        <li><Link to="/registration">Registration</Link></li>
-        {/* {
+        {
             user && isAdmin && <li><Link to="/dashboard/adminHome">Dashboard</Link></li>
         }
         {
-            user && !isAdmin && <li><Link to="/dashboard/userHome">Dashboard</Link></li>
-        } */}
+            user && !isAdmin && <li><Link to="/dashboard">Dashboard</Link></li>
+        }
+        <li><Link to="/registration">Registration</Link></li>
+
 
         {
-            // user ? <>
-            //     {/* <span>{user?.displayName}</span> */}
-            //     <button onClick={handleLogOut} className="btn btn-ghost">LogOut</button>
-            // </> : <>
-            //     <li><Link to="/login">Login</Link></li>
-            // </>
+            user ? <>
+                {/* <span>{user?.displayName}</span> */}
+                <button onClick={handleLogOut} className="btn btn-ghost">LogOut</button>
+            </> : <>
+                <li><Link to="/login">Login</Link></li>
+            </>
         }
     </>
 

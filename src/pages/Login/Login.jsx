@@ -12,7 +12,7 @@ const Login = () => {
     const location = useLocation();
 
     const from = location.state?.from?.pathname || "/";
-    console.log('state in the location login page', location.state)
+    console.log('state location of login page', location.state)
 
     
 

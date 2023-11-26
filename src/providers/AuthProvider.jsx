@@ -48,21 +48,22 @@ const AuthProvider = ({ children }) => {
             console.log('current user', currentUser);
             if (currentUser) {
                 //get token and store at client side
-                const userInfo = { email: currentUser.email }
-                axiosPublic.post('/jwt', userInfo)
-                    .then(res => {
-                        if (res.data.token) {
-                            localStorage.setItem('access-token', res.data.token)
-                            setLoading(false);
-                        }
-                    })
+                // const userInfo = { email: currentUser.email }
+                // axiosPublic.post('/jwt', userInfo)
+                //     .then(res => {
+                //         if (res.data.token) {
+                //             localStorage.setItem('access-token', res.data.token)
+                //             setLoading(false);
+                //         }
+                //     })
+                console.log(currentUser)
             }
-            else {
-                //TODO: remove token (if token stored at client side:Local storage,caching,in memory)
-                localStorage.removeItem('access-token')
-                setLoading(false);
+            // else {
+            //     //TODO: remove token (if token stored at client side:Local storage,caching,in memory)
+            //     localStorage.removeItem('access-token')
+            //     setLoading(false);
 
-            }
+            // }
         });
         return () => {
             return unsubscribe();
