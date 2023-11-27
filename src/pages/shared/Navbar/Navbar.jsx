@@ -23,9 +23,11 @@ const NavBar = () => {
             user && isAdmin && <li><Link to="/dashboard/adminHome">Dashboard</Link></li>
         }
         {
-            user && !isAdmin && <li><Link to="/dashboard">Dashboard</Link></li>
+            user && !isAdmin && <li><Link to="/dashboard/userHome">Dashboard</Link></li>
         }
-        <li><Link to="/registration">Registration</Link></li>
+        {
+            !user && <li><Link to="/registration">Registration</Link></li>
+        }
 
 
         {
@@ -52,7 +54,7 @@ const NavBar = () => {
                         </ul>
                     </div>
                     <div>
-                        <img src={logo} className="w-[120px] rounded-md bg-teal-600 mr-2 hidden md:flex" alt="" />
+                       <Link to='/'> <img src={logo} className="w-[120px] rounded-md bg-teal-600 mr-2 hidden md:flex" alt="" /></Link>
                     </div>
                     <div className="flex flex-col ml-4">
                         <Link to="/">

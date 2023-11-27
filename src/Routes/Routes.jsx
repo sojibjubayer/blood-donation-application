@@ -10,6 +10,11 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import UserHome from "../pages/Dashboard/UserHome/UserHome";
 import AdminRoute from "./AdminRoute";
 import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
+import MyDonationRequest from "../pages/Dashboard/MyDonationRequest/MyDonationRequest";
+import CreateDonationRequest from "../pages/Dashboard/CreateDonationRequest/CreateDonationRequest";
+import DonationRequestManagement from "../pages/Dashboard/DonationRequestManagement/DonationRequestManagement";
+import ContentManagement from "../pages/Dashboard/ContentManagement/ContentManagement";
+import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
 
 
 
@@ -44,10 +49,19 @@ import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
           element:<UserHome></UserHome>
 
         },
-        // {
-        //   path: 'cart',
-        //   element: <Cart></Cart>
-        // },
+        {
+          path: 'myDonationrequest',
+          element: <MyDonationRequest></MyDonationRequest>
+        },
+        {
+          path: 'createDonationRequest',
+          element: <CreateDonationRequest></CreateDonationRequest>
+        },
+        {
+          path: 'editInfo/:id',
+          element: <AdminRoute><UpdateItem></UpdateItem></AdminRoute>,
+          loader: ({params}) => fetch(`http://localhost:5000/donationRequests/${params.id}`)
+        },
         // {
         //   path:'payment',
         //   element:<Payment></Payment>
@@ -68,18 +82,18 @@ import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
         //   element: <AdminRoute><UpdateItem></UpdateItem></AdminRoute>,
         //   loader: ({params}) => fetch(`http://localhost:5000/menu/${params.id}`)
         // },
-        // {
-        //   path:'manageItems',
-        //   element:<AdminRoute><ManageItems></ManageItems></AdminRoute>
-        // },
-        // {
-        //   path:'addItems',
-        //   element:<AdminRoute><AddItems></AddItems></AdminRoute>
-        // },
-        // {
-        //   path:'users',
-        //   element:<AdminRoute><AllUsers></AllUsers></AdminRoute>
-        // }
+        {
+          path:'contentManagement',
+          element:<AdminRoute><ContentManagement></ContentManagement></AdminRoute>
+        },
+        {
+          path:'donationRequestManagement',
+          element:<AdminRoute><DonationRequestManagement></DonationRequestManagement></AdminRoute>
+        },
+        {
+          path:'users',
+          element:<AdminRoute><AllUsers></AllUsers></AdminRoute>
+        }
       ]
     }
   ]);

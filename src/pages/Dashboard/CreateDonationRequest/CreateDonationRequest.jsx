@@ -1,36 +1,30 @@
+
+
 import React, { useState, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Link, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
-import SocialLogin from '../components/SocialLogin';
-import useAxiosPublic from '../hooks/useAxiosPublic';
-import { AuthContext } from '../providers/AuthProvider';
+import { AuthContext } from '../../../providers/AuthProvider';
+import useAxiosPublic from '../../../hooks/useAxiosPublic';
+import { clear } from 'localforage';
+import { useQuery } from '@tanstack/react-query';
 
-const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
-const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
-const Register = () => {
-    const { createUser,updateUserProfile } = useContext(AuthContext);
-    const navigate = useNavigate()
+
+
+const CreateDonationRequest = () => {
+    const { user } = useContext(AuthContext);
+
+
     const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
-    const schema = yup.object().shape({
-        password: yup.string().required('Password is required'),
-        confirmPassword: yup
-            .string()
-            .oneOf([yup.ref('password'), null], 'Passwords must match')
-            .required('Confirm Password is required'),
-    });
 
-    const { register, handleSubmit, reset, formState } = useForm({
-        resolver: yupResolver(schema),
-    });
+    const { register, handleSubmit, reset, formState } = useForm();
 
     const axiosPublic = useAxiosPublic();
 
+
+        // GETTING DISTRICT AND UPAZILA 
     const { data: districts = [], isPending: loading, refetch } = useQuery({
         queryKey: ['districts'],
         queryFn: async () => {
@@ -47,8 +41,9 @@ const Register = () => {
         },
     });
 
+
+
     const [selectedDistrict, setSelectedDistrict] = useState('default');
-    const [selectedUpazila, setSelectedUpazila] = useState('default');
     const [filteredUpazilas, setFilteredUpazilas] = useState(upazilas);
     const [selectedDistrictName, setSelectedDistrictName] = useState('');
 
@@ -72,83 +67,68 @@ const Register = () => {
   
 
     const onSubmit = async (data) => {
-        
-        const imageFile = { image: data.image[0] };
-        const res = await axiosPublic.post(image_hosting_api, imageFile, {
-            headers: {
-                'content-type': 'multipart/form-data',
-            },
-        });
-        
-        const selectedUpazilaObj = filteredUpazilas.find((upazila) => upazila.id === data.upazila);
-       const selectedUpazilaName = selectedUpazilaObj ? selectedUpazilaObj.name : '';
     
+        const selectedUpazilaObj = filteredUpazilas.find((upazila) => upazila.id === data.upazila);
+        const selectedUpazilaName = selectedUpazilaObj ? selectedUpazilaObj.name : '';
 
-
-        
-        if (res.data.success) {
-            const photoURL = res.data.data.display_url;
-        }
-        
-        createUser(data.email,data.password)
-        .then(result=>{
-            console.log(result.user);
-            updateUserProfile(data.name, data.photoURL)
-                    .then(() => {
-                        console.log('name added updated')
-                    })
-
-        })
-
-        if (res.data.success) {
-            
-            const user = {
-                name: data.name,
-                email: data.email,
+            const requestInfo = {
+                reqName: data.requesterName,
+                reqEmail: data.requesterEmail,
+                reciName: data.recipientName,
                 bloodGroup: data.bloodGroup,
-                district: selectedDistrictName,
-                upazila: selectedUpazilaName,
-                status: 'active',
-                image: res.data.data.display_url,
-                role: 'donor'
+                reciDistrict: selectedDistrictName,
+                reciUpazila: selectedUpazilaName,
+                hospitalName: data.hospitalName,
+                fullAddress: data.fullAddress,
+                donationDate: data.donationDate,
+                donationTime: data.donationTime,
+                requestMessage: data.requestMessage,
+                donationStatus: 'pending',
+               
             };
-            console.log(user)
+            console.log(requestInfo)
 
-            const userRes = await axiosPublic.post('/users', user);
+            const requestInfoRes = await axiosPublic.post('/donationRequest', requestInfo);
 
-            if (userRes.data.insertedId) {
+            if (requestInfoRes.data.insertedId) {
                 reset();
                 Swal.fire({
                     position: 'top-end',
                     icon: 'success',
-                    title: 'Registration Successfull',
+                    title: 'Donation Request Successful',
                     showConfirmButton: false,
                     timer: 1500,
                 });
-                navigate('/')
+                clear()
             }
-        }
+        
     };
 
     return (
-        <div className="pt-24 pb-4 bg-teal-600">
-            <form onSubmit={handleSubmit(onSubmit)} className="md:w-[38%] mx-auto mt-0 p-4 mb-10 rounded-lg bg-white">
-                <div className="text-2xl font-bold text-center">Register</div>
+        <div className=" p3-4 bg-teal-600">
+            <form onSubmit={handleSubmit(onSubmit)} className=" mx-auto mt-0 p-4 mb-10 rounded-lg bg-white">
+                <div className="text-2xl font-bold text-center border-b-4 border-teal-400">Create Donation Request</div>
                 <div className="form-control w-full my-6">
                     <label className="label">
-                        <span className="label-text">Name*</span>
+                        <span className="label-text">Requester Name*</span>
                     </label>
-                    <input type="text" placeholder="Name" {...register('name', { required: true })} required className="input input-bordered w-full" />
+                    <input type="text" defaultValue={user?.displayName} {...register('requesterName', { required: true })} required className="input input-bordered w-full" readOnly  />
                 </div>
                 <div className="form-control w-full my-6">
                     <label className="label">
-                        <span className="label-text">Email*</span>
+                        <span className="label-text">Requester Email*</span>
                     </label>
-                    <input type="text" placeholder="Email" {...register('email', { required: true })} required className="input input-bordered w-full" />
+                    <input type="text" defaultValue={user?.email} {...register('requesterEmail', { required: true })} required className="input input-bordered w-full" readOnly />
                 </div>
                 <div className="form-control w-full my-6">
                     <label className="label">
-                        <span className="label-text">Blood Group*</span>
+                        <span className="label-text">Recipient Name</span>
+                    </label>
+                    <input type="text" placeholder="Recipient Name" {...register('recipientName', { required: true })} required className="input input-bordered w-full" />
+                </div>
+                <div className="form-control w-full my-6">
+                    <label className="label">
+                        <span className="label-text">Recipient Blood Group*</span>
                     </label>
                     <select defaultValue="default" {...register('bloodGroup', { required: true })} className="select select-bordered w-full">
                         <option disabled value="default">
@@ -180,7 +160,7 @@ const Register = () => {
                     <label className="label">
                         <span className="label-text">Upazila*</span>
                     </label>
-                    <select {...register('upazila', { required: true })} onChange={(e) => setSelectedUpazila(e.target.value)}  className="select select-bordered w-full">
+                    <select {...register('upazila', { required: true })} className="select select-bordered w-full">
                         <option  value="default">
                             Select an upazila
                         </option>
@@ -193,34 +173,43 @@ const Register = () => {
                 </div>
                 <div className="form-control w-full my-6">
                     <label className="label">
-                        <span className="label-text">Password*</span>
+                        <span className="label-text">Hospital Name</span>
                     </label>
-                    <input type="password" placeholder="Password" {...register('password')} className={`input input-bordered w-full ${formState.errors.password ? 'input-error' : ''}`} />
-                    {formState.errors.password && <p className="text-error">{formState.errors.password.message}</p>}
+                    <input type="text" placeholder="Recipient Name" {...register('hospitalName', { required: true })} required className="input input-bordered w-full" />
                 </div>
                 <div className="form-control w-full my-6">
                     <label className="label">
-                        <span className="label-text">Confirm Password*</span>
+                        <span className="label-text">Full Address </span>
                     </label>
-                    <input type="password" placeholder="Confirm Password" {...register('confirmPassword')} className={`input input-bordered w-full ${formState.errors.confirmPassword ? 'input-error' : ''}`} />
-                    {formState.errors.confirmPassword && <p className="text-error">{formState.errors.confirmPassword.message}</p>}
+                    <input type="text" placeholder="Recipient Name" {...register('fullAddress', { required: true })} required className="input input-bordered w-full" />
                 </div>
                 <div className="form-control w-full my-6">
                     <label className="label">
-                        <span className="label-text">Add Your Image*</span>
+                        <span className="label-text">Donation Date </span>
                     </label>
-                    <input {...register('image', { required: true })} type="file" className="file-input w-full max-w-xs" />
+                    <input type="date" placeholder="Recipient Name" {...register('donationDate', { required: true })} required className="input input-bordered w-full" />
                 </div>
-                <button className="btn w-full bg-teal-600 font-bold text-xl text-orange-300 hover:text-black hover:bg-teal-600">Register</button>
-                <p className="px-6 my-3">
-                    <small>
-                        Already Registered? <Link to="/login"> Login Here</Link>{' '}
-                    </small>
-                </p>
-                
+                <div className="form-control w-full my-6">
+                    <label className="label">
+                        <span className="label-text">Donation Time </span>
+                    </label>
+                    <input type="time" placeholder="Recipient Name" {...register('donationTime', { required: true })} required className="input input-bordered w-full" />
+                </div>
+                <div className="form-control w-full my-6">
+                    <label className="label">
+                        <span className="label-text">Request Message</span>
+                    </label>
+                    <input type="text" placeholder="Recipient Name" {...register('requestMessage', { required: true })} required className="input input-bordered w-full" />
+                </div>
+             
+             
+               
+                <button className="btn w-full bg-teal-600 font-bold text-xl text-orange-300 hover:text-black hover:bg-teal-600">Request Donation</button>
+
+              
             </form>
         </div>
     );
 };
 
-export default Register;
+export default CreateDonationRequest;

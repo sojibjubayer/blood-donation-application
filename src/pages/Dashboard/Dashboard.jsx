@@ -1,18 +1,19 @@
-import { FaAd, FaBook, FaCalendar, FaEnvelope, FaHome, FaList, FaSearch, FaShoppingCart, FaUser, FaUtensils, FaVoicemail } from "react-icons/fa";
+import { FaAd, FaEnvelope, FaHome, FaList, FaSearch, FaShoppingCart, FaUser, FaUtensils, FaVoicemail } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
 import useAdmin from "../../hooks/useAdmin";
-// import useCart from "../hooks/useCart";
+import useDonationRequest from "../../hooks/useDonationRequest";
+
 
 
 
 const Dashboard = () => {
-    // const [cart] = useCart();
+     const [donationRequest] = useDonationRequest()
     const [isAdmin] = useAdmin()
 
     return (
         <div className="flex">
             {/* dashboard side bar */}
-            <div className="w-64 min-h-screen bg-orange-400">
+            <div className="w-64 min-h-screen bg-teal-400">
                 <ul className="menu p-4">
                     {
                         isAdmin ? <>
@@ -22,20 +23,16 @@ const Dashboard = () => {
                                     Admin Home</NavLink>
                             </li>
                             <li>
-                                <NavLink to="/dashboard/addItems">
+                                <NavLink to="/dashboard/donationRequestManagement">
                                     <FaUtensils></FaUtensils>
-                                    Add Items</NavLink>
+                                    Donation Request Management</NavLink>
                             </li>
                             <li>
-                                <NavLink to="/dashboard/manageItems">
+                                <NavLink to="/dashboard/contentManagement">
                                     <FaList></FaList>
-                                    Manage Items</NavLink>
+                                    Content Management</NavLink>
                             </li>
-                            <li>
-                                <NavLink to="/dashboard/bookings">
-                                    <FaBook></FaBook>
-                                    Manage Bookings</NavLink>
-                            </li>
+                           
                             <li>
                                 <NavLink to="/dashboard/users">
                                     <FaUser></FaUser>
@@ -50,26 +47,18 @@ const Dashboard = () => {
                                         <FaHome></FaHome>
                                         User Home</NavLink>
                                 </li>
+                               
                                 <li>
-                                    <NavLink to="/dashboard/History">
-                                        <FaCalendar></FaCalendar>
-                                        Payment History</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/dashboard/cart">
+                                    <NavLink to="/dashboard/myDonationrequest">
                                         <FaShoppingCart></FaShoppingCart>
-                                        My Cart ({cart.length})</NavLink>
+                                        My Donation Request ({donationRequest.length})</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to="/dashboard/review">
+                                    <NavLink to="/dashboard/createDonationRequest">
                                         <FaAd></FaAd>
-                                        Add a Review</NavLink>
+                                        Create Donation Request</NavLink>
                                 </li>
-                                <li>
-                                    <NavLink to="/dashboard/paymentHistory">
-                                        <FaList></FaList>
-                                        Payment Real History</NavLink>
-                                </li>
+                               
                             </>
                     }
 

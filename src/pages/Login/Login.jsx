@@ -35,7 +35,7 @@ const Login = () => {
                         popup: 'animate__animated animate__fadeOutUp'
                     }
                 });
-                navigate(from, { replace: true });
+                navigate('/');
             })
     }
 
@@ -71,12 +71,11 @@ const Login = () => {
                             </div>
                           
                             <div className="form-control mt-6">
-                                
-                                <input className="btn btn-primary" type="submit" value="Login" />
+                                <input className="btn btn-primary bg-teal-600" type="submit" value="Login" />
                             </div>
                         </form>
-                        <p className='px-6'><small>New Here? <Link to="/registration">Please Register</Link> </small></p>
-                        <SocialLogin></SocialLogin>
+                        <p className='px-6'><small>New Here? <Link to="registration"><button>Please Register</button></Link> </small></p>
+                       
                     </div>
                 </div>
             </div>
