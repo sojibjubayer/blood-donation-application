@@ -5,6 +5,7 @@ import { AuthContext } from "../../../providers/AuthProvider";
 // import { FaShoppingCart } from 'react-icons/fa';
 import useAdmin from "../../../hooks/useAdmin";
 import logo from '../../../assets/logo1.png'
+import { FaHome } from "react-icons/fa";
 
 const NavBar = () => {
     const { user, logOut } = useContext(AuthContext);
@@ -33,7 +34,7 @@ const NavBar = () => {
         {
             user ? <>
                 {/* <span>{user?.displayName}</span> */}
-                <button onClick={handleLogOut} className="btn btn-ghost">LogOut</button>
+                <button onClick={handleLogOut} className="">Logout</button>
             </> : <>
                 <li><Link to="/login">Login</Link></li>
             </>
@@ -58,7 +59,7 @@ const NavBar = () => {
                     </div>
                     <div className="flex flex-col ml-4">
                         <Link to="/">
-                            <h3 className="">BDA</h3>
+                            <h3 className="flex items-center gap-1"><FaHome></FaHome> BDA</h3>
                             <h4 className="hidden md:flex">Blood Donation Application</h4>
                         </Link>
                     </div>

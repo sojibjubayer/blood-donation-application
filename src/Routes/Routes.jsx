@@ -16,6 +16,8 @@ import EditDonationRequest from "../pages/Dashboard/EditDonationRequest/EditDona
 import DonationRequestManagement from "../pages/Dashboard/DonationRequestManagement/DonationRequestManagement";
 import ContentManagement from "../pages/Dashboard/ContentManagement/ContentManagement";
 import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
+import DonationRequestDetails from "../pages/DonationRequestDetails/DonationRequestDetails";
+import DonationRequest from "../pages/DonationRequest/DonationRequest";
 
 
 
@@ -29,13 +31,25 @@ import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
             element: <Home></Home>
         }, 
         {
+          path:'donationRequest',
+          element:<DonationRequest></DonationRequest>
+        },
+        {
           path:'registration',
           element:<Register></Register>
         },
         {
           path:'login',
           element:<Login></Login>
-        }
+        },
+        //DONATION DETAILS PAGE
+        {
+          path:'donationRequestDetails/:id',
+          element:<DonationRequestDetails></DonationRequestDetails>,
+          loader: ({params}) => fetch(`http://localhost:5000/donationRequests/${params.id}`)
+
+        },
+        
         
       ]
     },
@@ -63,10 +77,7 @@ import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
           element: <EditDonationRequest></EditDonationRequest>,
           loader: ({params}) => fetch(`http://localhost:5000/donationRequests/${params.id}`)
         },
-        // {
-        //   path:'payment',
-        //   element:<Payment></Payment>
-        // },
+        
         // {
         //   path:'paymentHistory',
         //   element:<PaymentHistory></PaymentHistory>

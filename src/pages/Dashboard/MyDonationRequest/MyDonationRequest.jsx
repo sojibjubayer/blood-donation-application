@@ -5,11 +5,13 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Link } from "react-router-dom";
 
 import useDonationRequest from "../../../hooks/useDonationRequest";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 
 const MyDonationRequest = () => {
     const [donationRequest ,refetch] = useDonationRequest();
     const axiosSecure = useAxiosSecure();
+    const axiosPublic = useAxiosPublic();
 
     const handleDeleteinfo = (info) => {
         console.log(info)
@@ -23,7 +25,7 @@ const MyDonationRequest = () => {
             confirmButtonText: "Yes, delete it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const res = await axiosSecure.delete(`/donationRequest/${info._id}`);
+                const res = await axiosPublic.delete(`/donationRequest/${info._id}`);
                 console.log(res.data);
                 if (res.data.deletedCount > 0) {
                     // refetch to update the ui
@@ -43,7 +45,7 @@ const MyDonationRequest = () => {
     }
 
     return (
-        <div>
+       
         
             <div>
                 <div className="overflow-x-auto">
@@ -57,7 +59,7 @@ const MyDonationRequest = () => {
                                 <th>
                                     Recipient Name
                                 </th>
-                                <th>Location(DIst | Upz)</th>
+                                <th>Location (Dist | Upz)</th>
                                 <th>Date</th>
                                 <th>Time</th>
                                 <th>Donation Status</th>
@@ -108,11 +110,11 @@ const MyDonationRequest = () => {
                                         </button>
                                     </td>
                                     <td>
-                                        <Link to='/viewDetails'>
+                                    <Link to={`/donationRequestDetails/${info._id}`}>
                                         <button className="btn btn-ghost btn-sm">
                                             view
                                         </button></Link>
-                                    </td>
+                                </td>
                                 </tr>)
                             }
                         </tbody>
@@ -121,7 +123,7 @@ const MyDonationRequest = () => {
                     </table>
                 </div>
             </div>
-        </div>
+        
     );
 };
 

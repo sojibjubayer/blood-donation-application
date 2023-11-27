@@ -3,7 +3,9 @@
 const DonationRequestManagement = () => {
     return (
         <div>
-            Donation Request Management page
+            <div className="min-h-screen">
+                Donation Request Management page
+            </div>
         </div>
     );
 };
