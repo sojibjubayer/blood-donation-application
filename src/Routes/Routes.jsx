@@ -12,6 +12,7 @@ import AdminRoute from "./AdminRoute";
 import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
 import MyDonationRequest from "../pages/Dashboard/MyDonationRequest/MyDonationRequest";
 import CreateDonationRequest from "../pages/Dashboard/CreateDonationRequest/CreateDonationRequest";
+import EditDonationRequest from "../pages/Dashboard/EditDonationRequest/EditDonationRequest"
 import DonationRequestManagement from "../pages/Dashboard/DonationRequestManagement/DonationRequestManagement";
 import ContentManagement from "../pages/Dashboard/ContentManagement/ContentManagement";
 import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
@@ -59,7 +60,7 @@ import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
         },
         {
           path: 'editInfo/:id',
-          element: <AdminRoute><UpdateItem></UpdateItem></AdminRoute>,
+          element: <EditDonationRequest></EditDonationRequest>,
           loader: ({params}) => fetch(`http://localhost:5000/donationRequests/${params.id}`)
         },
         // {

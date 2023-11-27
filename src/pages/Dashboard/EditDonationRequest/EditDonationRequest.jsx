@@ -8,12 +8,15 @@ import { AuthContext } from '../../../providers/AuthProvider';
 import useAxiosPublic from '../../../hooks/useAxiosPublic';
 import { clear } from 'localforage';
 import { useQuery } from '@tanstack/react-query';
+import { useLoaderData } from 'react-router-dom';
 
 
 
 
 const EditDonationRequest = () => {
     const { user } = useContext(AuthContext);
+    const { _id } = useLoaderData()
+
 
 
     const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
@@ -83,20 +86,21 @@ const EditDonationRequest = () => {
                 donationDate: data.donationDate,
                 donationTime: data.donationTime,
                 requestMessage: data.requestMessage,
-                donationStatus: 'pending',
+                donationStatus: 'pending'
+                
                
             };
             console.log(requestInfo)
 
             const infoRes = await axiosPublic.patch(`/donationRequests/${_id}`, requestInfo);
             console.log(infoRes.data)
-            if(menuRes.data.modifiedCount > 0){
+            if(infoRes.data.modifiedCount > 0){
                 // show success popup
                 // reset();
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
-                    title: `${data.name} is updated to the menu.`,
+                    title: 'Updated Request Info',
                     showConfirmButton: false,
                     timer: 1500
                   });
@@ -107,7 +111,7 @@ const EditDonationRequest = () => {
     return (
         <div className=" p3-4 bg-teal-600">
             <form onSubmit={handleSubmit(onSubmit)} className=" mx-auto mt-0 p-4 mb-10 rounded-lg bg-white">
-                <div className="text-2xl font-bold text-center border-b-4 border-teal-400">Create Donation Request</div>
+                <div className="text-2xl font-bold text-center border-b-4 border-teal-400">Edit Donation Request</div>
                 <div className="form-control w-full my-6">
                     <label className="label">
                         <span className="label-text">Requester Name*</span>
@@ -204,7 +208,7 @@ const EditDonationRequest = () => {
              
              
                
-                <button className="btn w-full bg-teal-600 font-bold text-xl text-orange-300 hover:text-black hover:bg-teal-600">Request Donation</button>
+                <button className="btn w-full bg-teal-600 font-bold text-xl text-orange-300 hover:text-black hover:bg-teal-600">Update Donation Request </button>
 
               
             </form>
