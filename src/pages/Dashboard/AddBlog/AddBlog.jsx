@@ -14,53 +14,10 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_ke
 const AddBlog = () => {
 
     const navigate = useNavigate()
-    const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
-
- 
 
     const { register, handleSubmit, reset, formState } = useForm();
 
     const axiosPublic = useAxiosPublic();
-
-    const { data: districts = [], isPending: loading, refetch } = useQuery({
-        queryKey: ['districts'],
-        queryFn: async () => {
-            const res = await axiosPublic.get('/districts');
-            return res.data;
-        },
-    });
-
-    const { data: upazilas = [] } = useQuery({
-        queryKey: ['upazilas'],
-        queryFn: async () => {
-            const res = await axiosPublic.get('/upazilas');
-            return res.data;
-        },
-    });
-
-    const [selectedDistrict, setSelectedDistrict] = useState('default');
-    const [selectedUpazila, setSelectedUpazila] = useState('default');
-    const [filteredUpazilas, setFilteredUpazilas] = useState(upazilas);
-    const [selectedDistrictName, setSelectedDistrictName] = useState('');
-
-   
-
-    useEffect(() => {
-        if (selectedDistrict !== 'default') {
-          const districtObj = districts.find((district) => district.id === selectedDistrict);
-          setSelectedDistrictName(districtObj ? districtObj.name : '');
-        }
-      }, [selectedDistrict, districts]);
-      
-      useEffect(() => {
-        if (selectedDistrict !== 'default') {
-          const filtered = upazilas.filter((upazila) => upazila.district_id === selectedDistrict);
-          setFilteredUpazilas(filtered);
-        } else {
-          setFilteredUpazilas(upazilas);
-        }
-      }, [selectedDistrict, upazilas]);
-  
 
     const onSubmit = async (data) => {
         
@@ -71,36 +28,30 @@ const AddBlog = () => {
             },
         });
         
-        const selectedUpazilaObj = filteredUpazilas.find((upazila) => upazila.id === data.upazila);
-       const selectedUpazilaName = selectedUpazilaObj ? selectedUpazilaObj.name : '';
-    
 
         if (res.data.success) {
             
-            const user = {
-                name: data.name,
-                email: data.email,
-                bloodGroup: data.bloodGroup,
-                district: selectedDistrictName,
-                upazila: selectedUpazilaName,
-                status: 'active',
+            const blog = {
+                title: data.title,
                 image: res.data.data.display_url,
-                role: 'donor'
+                content: data.content,
+                status: 'draft',
+              
             };
-            console.log(user)
+            console.log(blog)
 
-            const userRes = await axiosPublic.post('/users', user);
+            const userRes = await axiosPublic.post('/blogPost', blog);
 
             if (userRes.data.insertedId) {
                 reset();
                 Swal.fire({
                     position: 'top-end',
                     icon: 'success',
-                    title: 'Registration Successfull',
+                    title: 'Blog Posted Sucessfully',
                     showConfirmButton: false,
                     timer: 1500,
                 });
-                navigate('/')
+                navigate('/dashboard/contentManagement')
             }
         }
     };
@@ -123,12 +74,12 @@ const AddBlog = () => {
                 </div>
 
 
-                
+
                 <div className="form-control w-full my-6">
                     <label className="label">
                         <span className="label-text">Content*</span>
                     </label>
-                    <input type="text" placeholder="blog content" {...register('content', { required: true })} required className="input input-bordered w-full" />
+                    <textarea  placeholder="blog content" {...register('content', { required: true })} required className="input input-bordered w-full" />
                 </div>
               
                

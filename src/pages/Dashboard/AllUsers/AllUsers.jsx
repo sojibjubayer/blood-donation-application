@@ -44,14 +44,12 @@ const AllUsers = () => {
         }
     };
     const handleMakeVolunteer = async ({ role, _id }) => {
-        console.log(status)
-
         try {
 
             const response = await axiosPublic.patch(`/makeVolunteer/${_id}`, { role });
-            console.log(response.data);
+            
             if (response.data.modifiedCount > 0) {
-                refetch()
+          
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
