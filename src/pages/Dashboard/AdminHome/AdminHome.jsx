@@ -2,54 +2,51 @@ import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../../hooks/useAuth'
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { FaBook, FaDollarSign, FaUsers } from 'react-icons/fa';
+import useAxiosPublic from '../../../hooks/useAxiosPublic';
 
 const AdminHome = () => {
     const { user } = useAuth()
     const axiosSecure = useAxiosSecure()
+    const axiosPublic = useAxiosPublic()
 
-    const { data: stats={} } = useQuery({
+    const { data: stats = {} } = useQuery({
         queryKey: ['admin-stats'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/admin-stats')
+            const res = await axiosPublic.get('/admin-stats')
             return res.data;
         }
     });
-  
+
     return (
         <div>
-            <h2 className="text-3xl">
+            <h2 className="text-3xl flex items-center gap-3">
                 <span>Hi,Welcome </span>
-                {
-                    user?.displayName ? user.displayName : 'back'
-                }
+                <div className='bg-red-200 p-2 text-2xl rounded-md'>
+                    {
+                        user?.displayName ? user.displayName : 'back'
+                    }
+                </div>
             </h2>
 
             <div className="stats shadow">
 
                 <div className="stat">
                     <div className="stat-figure text-secondary">
-                       <FaDollarSign className='text-3xl'></FaDollarSign>
+                        <FaDollarSign className='text-3xl'></FaDollarSign>
                     </div>
-                    <div className="stat-title">Revenue</div>
-                    <div className="stat-value">$ {stats.revenue}</div>
-                    <div className="stat-desc">Jan 1st - Feb 1st</div>
+                    <div className="stat-title">Total Users</div>
+                    <div className="stat-value">$ {stats.users}</div>
+                    
                 </div>
 
+               
                 <div className="stat">
                     <div className="stat-figure text-secondary">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                        <FaBook className='text-3xl'></FaBook>
                     </div>
-                    <div className="stat-title"> Users</div>
-                    <div className="stat-value">{stats.users}</div>
-                    <div className="stat-desc">↗︎ 400 (22%)</div>
-                </div>
-                <div className="stat">
-                    <div className="stat-figure text-secondary">
-                    <FaBook className='text-3xl'></FaBook>
-                    </div>
-                    <div className="stat-title"> Menu Items</div>
-                    <div className="stat-value">{stats.menuItems}</div>
-                    <div className="stat-desc">↗︎ 400 (22%)</div>
+                    <div className="stat-title"> Total Request</div>
+                    <div className="stat-value">{stats.totalRequest}</div>
+                    
                 </div>
 
                 <div className="stat">

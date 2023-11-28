@@ -14,7 +14,7 @@ const Dashboard = () => {
         <div className="flex">
             {/* dashboard side bar */}
             <div className="w-64 min-h-screen bg-teal-400">
-                <ul className="menu p-4">
+                <ul className="menu p-4 ">
                     {
                         isAdmin ? <>
                             <li>
@@ -22,10 +22,15 @@ const Dashboard = () => {
                                     <FaHome></FaHome>
                                     Admin Home</NavLink>
                             </li>
-                            <li>
+                            <li className="my-2">
+                                <NavLink to="/dashboard/users">
+                                    <FaUser></FaUser>
+                                    All Users</NavLink>
+                            </li>
+                            <li className="my-3">
                                 <NavLink to="/dashboard/donationRequestManagement">
                                     <FaUtensils></FaUtensils>
-                                    Donation Request Management</NavLink>
+                                    All Blood Donation Request</NavLink>
                             </li>
                             <li>
                                 <NavLink to="/dashboard/contentManagement">
@@ -33,11 +38,7 @@ const Dashboard = () => {
                                     Content Management</NavLink>
                             </li>
                            
-                            <li>
-                                <NavLink to="/dashboard/users">
-                                    <FaUser></FaUser>
-                                    All Users</NavLink>
-                            </li>
+                           
 
                         </>
                             :
