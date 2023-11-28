@@ -18,6 +18,11 @@ import ContentManagement from "../pages/Dashboard/ContentManagement/ContentManag
 import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
 import DonationRequestDetails from "../pages/DonationRequestDetails/DonationRequestDetails";
 import DonationRequest from "../pages/DonationRequest/DonationRequest";
+import MyProfile from "../pages/Dashboard/MyProfile/MyProfile";
+import UpdateProfile from "../pages/Dashboard/MyProfile/UpdateProfile/UpdateProfile";
+import AllDonationRequest from "../pages/Dashboard/AllDonationRequest/AllDonationRequest";
+import AddBlog from "../pages/Dashboard/AddBlog/AddBlog";
+
 
 
 
@@ -77,6 +82,15 @@ import DonationRequest from "../pages/DonationRequest/DonationRequest";
           element: <EditDonationRequest></EditDonationRequest>,
           loader: ({params}) => fetch(`http://localhost:5000/donationRequests/${params.id}`)
         },
+        {
+          path:'profile',
+          element:<MyProfile></MyProfile>
+        },
+        {
+          path: 'updateProfile/:id',
+          element: <UpdateProfile></UpdateProfile>,
+          loader: ({params}) => fetch(`http://localhost:5000/allUsers/${params.id}`)
+        },
         
         // {
         //   path:'paymentHistory',
@@ -99,8 +113,13 @@ import DonationRequest from "../pages/DonationRequest/DonationRequest";
           element:<AdminRoute><ContentManagement></ContentManagement></AdminRoute>
         },
         {
-          path:'donationRequestManagement',
-          element:<AdminRoute><DonationRequestManagement></DonationRequestManagement></AdminRoute>
+          path:'content-management/add-blog',
+          element:<AdminRoute><AddBlog></AddBlog></AdminRoute>
+        },
+
+        {
+          path:'allDonationRequest',
+          element:<AdminRoute><AllDonationRequest></AllDonationRequest></AdminRoute>
         },
         {
           path:'users',

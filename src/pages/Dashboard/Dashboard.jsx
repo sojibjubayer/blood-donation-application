@@ -1,4 +1,4 @@
-import { FaAd, FaEnvelope, FaHome, FaList, FaSearch, FaShoppingCart, FaUser, FaUtensils, FaVoicemail } from "react-icons/fa";
+import { FaAd, FaEnvelope, FaHome, FaList, FaShoppingCart, FaUser, FaUtensils, FaVoicemail } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
 import useAdmin from "../../hooks/useAdmin";
 import useDonationRequest from "../../hooks/useDonationRequest";
@@ -28,7 +28,7 @@ const Dashboard = () => {
                                     All Users</NavLink>
                             </li>
                             <li className="my-3">
-                                <NavLink to="/dashboard/donationRequestManagement">
+                                <NavLink to="/dashboard/allDonationRequest">
                                     <FaUtensils></FaUtensils>
                                     All Blood Donation Request</NavLink>
                             </li>
@@ -74,9 +74,9 @@ const Dashboard = () => {
                             Home</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/order/salad">
-                            <FaSearch></FaSearch>
-                            Menu</NavLink>
+                        <NavLink to="/dashboard/profile">
+                            <FaUser></FaUser>
+                            My Profile</NavLink>
                     </li>
                     <li>
                         <NavLink to="/order/contact">

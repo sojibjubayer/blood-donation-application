@@ -3,11 +3,13 @@ import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
+import { useContext } from "react";
+import { AuthContext } from "../../../providers/AuthProvider";
 
 
 const AllUsers = () => {
     const axiosPublic = useAxiosPublic()
-
+    const { user: adminUser } = useContext(AuthContext)
 
     const { refetch, data: allUsers = [], isLoading } = useQuery({
         queryKey: ['allUsers'],
@@ -21,7 +23,7 @@ const AllUsers = () => {
         console.log(status)
 
         try {
-            // Make your axios request with status and _id
+
             const response = await axiosPublic.patch(`/activeBlock/${_id}`, { status });
             console.log(response.data);
             if (response.data.modifiedCount > 0) {
@@ -35,14 +37,64 @@ const AllUsers = () => {
                 })
                 refetch()
             }
-          } 
-          catch (error) {
+        }
+        catch (error) {
             console.error('Error:', error);
-            
-          }
-        };
 
-    
+        }
+    };
+    const handleMakeVolunteer = async ({ role, _id }) => {
+        console.log(status)
+
+        try {
+
+            const response = await axiosPublic.patch(`/makeVolunteer/${_id}`, { role });
+            console.log(response.data);
+            if (response.data.modifiedCount > 0) {
+                refetch()
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: `volunteer role added`,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                refetch()
+            }
+        }
+        catch (error) {
+            console.error('Error:', error);
+
+        }
+    };
+
+
+    const handleMakeAdmin = async ({ role, _id }) => {
+        console.log(status)
+
+        try {
+
+            const response = await axiosPublic.patch(`/makeAdmin/${_id}`, { role });
+            console.log(response.data);
+            if (response.data.modifiedCount > 0) {
+                refetch()
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: `Admin role added`,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                refetch()
+            }
+        }
+        catch (error) {
+            console.error('Error:', error);
+
+        }
+    };
+
+
 
     return (
         <div>
@@ -67,7 +119,7 @@ const AllUsers = () => {
                         </thead>
                         <tbody>
                             {
-                                allUsers?.filter(admin=>admin.email!=='jubayer@gmail.com').map((user, index) => <tr key={user._id}>
+                                allUsers?.filter(me => me.email !== adminUser.email).map((user, index) => <tr key={user._id}>
 
                                     <td>
                                         <div className="flex users-center gap-3">
@@ -95,24 +147,27 @@ const AllUsers = () => {
                                         >
                                             {user.status === 'active' ? 'block' : 'active'}
                                         </button>
-
-                                    </td>
-
-                                    <td>
-                                        <Link to={`/dashboard/updateuser/${user._id}`}>
-                                            <button
-                                                className="btn  btn-sm bg-orange-500">
-                                                make volunteer
-                                            </button>
-                                        </Link>
                                     </td>
                                     <td>
-                                        <Link to={`/dashboard/updateuser/${user._id}`}>
-                                            <button
-                                                className="btn  btn-sm bg-green-500">
-                                                make admin
-                                            </button>
-                                        </Link>
+
+                                        <button
+                                            className="btn btn-sm bg-orange-400"
+                                            onClick={() => handleMakeVolunteer({ role: 'volunteer', _id: user._id })}
+                                            disabled={user.role === 'admin'}
+                                        >
+                                            {user.role === 'admin' ? 'Admin' : user.role === 'donor' ? 'Make Volunteer' : user.role === 'volunteer' ? 'Volunteer' : ''}
+                                        </button>
+
+
+                                    </td>
+                                    <td>
+                                    <button
+                                            className="btn btn-sm bg-green-400"
+                                            onClick={() => handleMakeAdmin({ role: 'admin',_id: user._id})}
+                                            disabled={user.role === 'admin'}
+                                        >
+                                            {user.role === 'admin' ? 'admin' : 'Make admin'}
+                                        </button>
                                     </td>
 
                                 </tr>)

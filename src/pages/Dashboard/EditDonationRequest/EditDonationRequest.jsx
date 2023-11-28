@@ -2,11 +2,9 @@
 
 import React, { useState, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../../../providers/AuthProvider';
 import useAxiosPublic from '../../../hooks/useAxiosPublic';
-import { clear } from 'localforage';
 import { useQuery } from '@tanstack/react-query';
 import { useLoaderData } from 'react-router-dom';
 
@@ -16,6 +14,7 @@ import { useLoaderData } from 'react-router-dom';
 const EditDonationRequest = () => {
     const { user } = useContext(AuthContext);
     const { _id } = useLoaderData()
+    console.log( _id )
 
 
 

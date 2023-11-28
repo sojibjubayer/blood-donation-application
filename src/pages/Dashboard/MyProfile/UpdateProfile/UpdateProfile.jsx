@@ -1,32 +1,23 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { Link, useNavigate } from 'react-router-dom';
+import {  useLoaderData, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
-import useAxiosPublic from '../hooks/useAxiosPublic';
-import { AuthContext } from '../providers/AuthProvider';
+
+import useAxiosPublic from '../../../../hooks/useAxiosPublic';
+
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
-const Register = () => {
-    const { createUser,updateUserProfile } = useContext(AuthContext);
+const UpdateProfile = () => {
+    const {_id,email} = useLoaderData()
     const navigate = useNavigate()
     const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
-    const schema = yup.object().shape({
-        password: yup.string().required('Password is required'),
-        confirmPassword: yup
-            .string()
-            .oneOf([yup.ref('password'), null], 'Passwords must match')
-            .required('Confirm Password is required'),
-    });
+  
 
-    const { register, handleSubmit, reset, formState } = useForm({
-        resolver: yupResolver(schema),
-    });
+    const { register, handleSubmit, reset, formState } = useForm();
 
     const axiosPublic = useAxiosPublic();
 
@@ -83,56 +74,40 @@ const Register = () => {
        const selectedUpazilaName = selectedUpazilaObj ? selectedUpazilaObj.name : '';
     
 
-
-        
-        if (res.data.success) {
-            const photoURL = res.data.data.display_url;
-        }
-        
-        createUser(data.email,data.password)
-        .then(result=>{
-            console.log(result.user);
-            updateUserProfile(data.name, data.photoURL)
-                    .then(() => {
-                        console.log('name added updated')
-                    })
-
-        })
-
         if (res.data.success) {
             
-            const user = {
+            const updateUser = {
                 name: data.name,
                 email: data.email,
                 bloodGroup: data.bloodGroup,
                 district: selectedDistrictName,
                 upazila: selectedUpazilaName,
-                status: 'active',
                 image: res.data.data.display_url,
-                role: 'donor'
+
             };
-            console.log(user)
+            console.log(updateUser)
 
-            const userRes = await axiosPublic.post('/users', user);
-
-            if (userRes.data.insertedId) {
-                reset();
+            const userUpdateRes = await axiosPublic.patch(`/updateProfile/${_id}`, updateUser);
+            console.log(userUpdateRes)
+            if (userUpdateRes.data.modifiedCount>0) {
+               
                 Swal.fire({
                     position: 'top-end',
                     icon: 'success',
-                    title: 'Registration Successfull',
+                    title: 'Updated Successfully',
                     showConfirmButton: false,
                     timer: 1500,
                 });
-                navigate('/')
+                reset();
+                navigate('/dashboard/profile')
             }
         }
     };
 
     return (
-        <div className="pt-24 pb-4 bg-teal-600">
-            <form onSubmit={handleSubmit(onSubmit)} className="md:w-[38%] mx-auto mt-0 p-4 mb-10 rounded-lg bg-white">
-                <div className="text-2xl font-bold text-center">Register</div>
+        <div className=" bg-teal-600">
+            <form onSubmit={handleSubmit(onSubmit)} className=" mx-auto mt-0 p-4 mb-10 rounded-lg bg-white">
+                <div className="text-2xl font-bold text-center">Update Your Profile</div>
                 <div className="form-control w-full my-6">
                     <label className="label">
                         <span className="label-text">Name*</span>
@@ -143,7 +118,7 @@ const Register = () => {
                     <label className="label">
                         <span className="label-text">Email*</span>
                     </label>
-                    <input type="text" placeholder="Email" {...register('email', { required: true })} required className="input input-bordered w-full" />
+                    <input type="text" defaultValue={email} {...register('email', { required: true })} required className="input input-bordered w-full" readOnly/>
                 </div>
                 <div className="form-control w-full my-6">
                     <label className="label">
@@ -190,36 +165,20 @@ const Register = () => {
                         ))}
                     </select>
                 </div>
-                <div className="form-control w-full my-6">
-                    <label className="label">
-                        <span className="label-text">Password*</span>
-                    </label>
-                    <input type="password" placeholder="Password" {...register('password')} className={`input input-bordered w-full ${formState.errors.password ? 'input-error' : ''}`} />
-                    {formState.errors.password && <p className="text-error">{formState.errors.password.message}</p>}
-                </div>
-                <div className="form-control w-full my-6">
-                    <label className="label">
-                        <span className="label-text">Confirm Password*</span>
-                    </label>
-                    <input type="password" placeholder="Confirm Password" {...register('confirmPassword')} className={`input input-bordered w-full ${formState.errors.confirmPassword ? 'input-error' : ''}`} />
-                    {formState.errors.confirmPassword && <p className="text-error">{formState.errors.confirmPassword.message}</p>}
-                </div>
+               
+                
                 <div className="form-control w-full my-6">
                     <label className="label">
                         <span className="label-text">Add Your Image*</span>
                     </label>
                     <input {...register('image', { required: true })} type="file" className="file-input w-full max-w-xs" />
                 </div>
-                <button className="btn w-full bg-teal-600 font-bold text-xl text-orange-300 hover:text-black hover:bg-teal-600">Register</button>
-                <p className="px-6 my-3">
-                    <small>
-                        Already Registered? <Link to="/login"> Login Here</Link>{' '}
-                    </small>
-                </p>
+                <button className="btn w-full bg-teal-600 font-bold text-xl text-orange-300 hover:text-black hover:bg-teal-600">Update</button>
+              
                 
             </form>
         </div>
     );
 };
 
-export default Register;
+export default UpdateProfile;
