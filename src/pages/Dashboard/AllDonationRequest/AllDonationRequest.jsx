@@ -4,10 +4,13 @@ import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { Link } from "react-router-dom";
 import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import useAdmin from "../../../hooks/useAdmin";
 
 
 const AllDonationRequest = () => {
-    const [AllDonationRequest ,refetch,isLoading] = useDonationRequestPublic();
+    const [AllDonationRequest, refetch, isLoading] = useDonationRequestPublic();
+    const [isAdmin] = useAdmin()
+
     // const axiosSecure = useAxiosSecure();
     const axiosPublic = useAxiosPublic();
     console.log(AllDonationRequest)
@@ -44,88 +47,92 @@ const AllDonationRequest = () => {
     }
 
     return (
-       
-        
-            <div>
-                <div className="overflow-x-auto">
-                    <div className="text-2xl font-bold text-center border-b-4 border-teal-400 p-2">
-                        All Blood Donation Request 
-                    </div>
-                    <table className="table w-full">
-                        {/* head */}
-                        <thead>
-                            <tr>
-                                <th>
-                                    Recipient Name
-                                </th>
-                                <th>Location (Dist | Upz)</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Donation Status</th>
-                                <th>Donor Info</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                                <th>View</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            { 
+
+        <div>
+            <div className="overflow-x-auto">
+                <div className="text-2xl font-bold text-center border-b-4 border-teal-400 p-2">
+                    All Blood Donation Request
+                </div>
+                <table className="table w-full">
+                    {/* head */}
+                    <thead>
+                        <tr>
+                            <th> Recipient Name </th>
+                            <th>Location (Dist | Upz)</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Donation Status</th>
+                            <th>Donor Info</th>
+                            {isAdmin && (
+                            <th>Edit</th>
+                            )}{isAdmin && (
+                            <th>Delete</th> )}
+                            <th>View</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
                             //  isLoading? <span className="loading loading-spinner text-secondary"></span>
                             //  :
                             AllDonationRequest.map((info, index) => <tr key={info._id}>
-                            <td>
-                                {info.reciName}
-                            </td>
-                            <td>
-                                {info.reciDistrict } | {info.reciUpazila}
-                            </td>
-                            
-                            <td>
-                                {info.donationDate}
-                            </td>
-                            <td>
-                                {info.donationTime}
-                            </td>
-                            <td>
-                                {info.donationStatus}
-                            </td>
-                            <td>
-                                #
-                            </td>
-                           
-                            <td>
-                            <Link to={`/dashboard/editInfo/${info._id}`}>
-                                    <button
-                                        className="btn btn-ghost btn-lg bg-orange-500">
-                                        <FaEdit className="text-white 
-                                "></FaEdit>
-                                    </button>
-                                </Link>
-                            </td>
-                            <td>
-                                <button
-                                    onClick={() => handleDeleteinfo(info)}
-                                    className="btn btn-ghost btn-lg">
-                                    <FaTrashAlt className="text-red-600"></FaTrashAlt>
-                                </button>
-                            </td>
-                            <td>
-                            <Link to={`/donationRequestDetails/${info._id}`}>
-                                <button className="btn btn-ghost btn-sm">
-                                    view
-                                </button></Link>
-                        </td>
-                        </tr>)
-                            
-                            }
-                        </tbody>
+                                <td>
+                                    {info.reciName}
+                                </td>
+                                <td>
+                                    {info.reciDistrict} | {info.reciUpazila}
+                                </td>
+
+                                <td>
+                                    {info.donationDate}
+                                </td>
+                                <td>
+                                    {info.donationTime}
+                                </td>
+                                <td>
+                                    {info.donationStatus}
+                                </td>
+                                <td>
+                                    #
+                                </td>
+                                {isAdmin && (
+                                <td>
+                                    <Link to={`/dashboard/editInfo/${info._id}`}>
+                                        <button
+                                            className="btn btn-ghost btn-lg bg-orange-500"
+                                            disabled={!isAdmin}>
+                                            <FaEdit className="text-white "></FaEdit>
+                                        </button>
+                                    </Link>
+                                </td>
+                                )}
+                                {isAdmin && (
+                                    <td>
+                                        <button
+                                            onClick={() => handleDeleteinfo(info)}
+                                            className="btn btn-ghost btn-lg"  >
+                                            <FaTrashAlt className="text-red-600"></FaTrashAlt>
+                                        </button>
+                                    </td>
+                                )}
+
+                                <td>
+                                    <Link to={`/donationRequestDetails/${info._id}`}>
+                                        <button className="btn btn-ghost btn-sm">
+                                            view
+                                        </button></Link>
+                                </td>
+                            </tr>)
+
+                        }
+                    </tbody>
 
 
-                    </table>
-                </div>
+                </table>
             </div>
-        
+        </div>
+
     );
 };
 

@@ -13,7 +13,7 @@ const useDonationRequest = () => {
     const { refetch, data: donationRequest = [] } = useQuery({
         queryKey: ['donationRequest', user?.email],
         queryFn: async() => {
-            const res = await axiosPublic.get(`/donationRequests?email=${user.email}`);
+            const res = await axiosSecure.get(`/donationRequests?email=${user.email}`);
             return res.data;
         }
     })

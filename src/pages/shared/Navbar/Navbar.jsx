@@ -6,10 +6,16 @@ import { AuthContext } from "../../../providers/AuthProvider";
 import useAdmin from "../../../hooks/useAdmin";
 import logo from '../../../assets/logo1.png'
 import { FaHome } from "react-icons/fa";
+import useVolunteer from "../../../hooks/useVolunteer";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import { useQuery } from "react-query";
 
 const NavBar = () => {
     const { user, logOut } = useContext(AuthContext);
     const [isAdmin] = useAdmin()
+    const [isVolunteer] = useVolunteer()
+   
+
 
     const handleLogOut = () => {
         logOut()
@@ -19,12 +25,15 @@ const NavBar = () => {
 
     const navOptions = <>
         <li><Link to="/donationRequest">Donation Request</Link></li>
-        <li><Link to="/blog">Blog</Link></li>
+        <li><Link to="/blogs">Blog</Link></li>
         {
-            user && isAdmin && <li><Link to="/dashboard/adminHome">Dashboard</Link></li>
+            user && isAdmin && !isVolunteer && <li><Link to="/dashboard">Dashboard</Link></li>
         }
         {
-            user && !isAdmin && <li><Link to="/dashboard/userHome">Dashboard</Link></li>
+            user && !isAdmin && isVolunteer && <li><Link to="/dashboard">Dashboard</Link></li>
+        }
+        {
+            (user && !isAdmin && !isVolunteer) && <li><Link to="/dashboard/userHome">Dashboard</Link></li>
         }
         {
             !user && <li><Link to="/registration">Registration</Link></li>
@@ -70,7 +79,7 @@ const NavBar = () => {
                     </ul>
                 </div>
                 <div className="navbar-end">
-                    <a className="btn">logo</a>
+                    <a className="">{user?.displayName}</a>
                 </div>
             </div>
         </>

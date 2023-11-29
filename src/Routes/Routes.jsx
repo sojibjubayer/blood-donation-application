@@ -13,7 +13,7 @@ import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
 import MyDonationRequest from "../pages/Dashboard/MyDonationRequest/MyDonationRequest";
 import CreateDonationRequest from "../pages/Dashboard/CreateDonationRequest/CreateDonationRequest";
 import EditDonationRequest from "../pages/Dashboard/EditDonationRequest/EditDonationRequest"
-import DonationRequestManagement from "../pages/Dashboard/DonationRequestManagement/DonationRequestManagement";
+
 import ContentManagement from "../pages/Dashboard/ContentManagement/ContentManagement";
 import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
 import DonationRequestDetails from "../pages/DonationRequestDetails/DonationRequestDetails";
@@ -22,6 +22,8 @@ import MyProfile from "../pages/Dashboard/MyProfile/MyProfile";
 import UpdateProfile from "../pages/Dashboard/MyProfile/UpdateProfile/UpdateProfile";
 import AllDonationRequest from "../pages/Dashboard/AllDonationRequest/AllDonationRequest";
 import AddBlog from "../pages/Dashboard/AddBlog/AddBlog";
+import Blogs from "../pages/Blogs/Blogs";
+import SearchPage from "../pages/SearchPage/SearchPage";
 
 
 
@@ -40,6 +42,10 @@ import AddBlog from "../pages/Dashboard/AddBlog/AddBlog";
           element:<DonationRequest></DonationRequest>
         },
         {
+          path:'blogs',
+          element:<Blogs></Blogs>
+        },
+        {
           path:'registration',
           element:<Register></Register>
         },
@@ -53,6 +59,11 @@ import AddBlog from "../pages/Dashboard/AddBlog/AddBlog";
           element:<DonationRequestDetails></DonationRequestDetails>,
           loader: ({params}) => fetch(`http://localhost:5000/donationRequests/${params.id}`)
 
+        },
+        {
+          path: 'searchDonors',
+          element: <SearchPage></SearchPage>,
+          
         },
         
         
@@ -91,6 +102,8 @@ import AddBlog from "../pages/Dashboard/AddBlog/AddBlog";
           element: <UpdateProfile></UpdateProfile>,
           loader: ({params}) => fetch(`http://localhost:5000/allUsers/${params.id}`)
         },
+      
+        
         
         // {
         //   path:'paymentHistory',
@@ -100,7 +113,7 @@ import AddBlog from "../pages/Dashboard/AddBlog/AddBlog";
 
         //admin only routes
         {
-          path:'adminHome',
+          path:'/dashboard',
           element:<AdminRoute><AdminHome></AdminHome></AdminRoute>
         },
         // {

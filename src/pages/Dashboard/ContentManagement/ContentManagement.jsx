@@ -4,12 +4,12 @@ import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useState } from "react";
+import useAdmin from "../../../hooks/useAdmin";
 
 
 const ContentManagement = () => {
+    const [isAdmin] = useAdmin()
     const axiosPublic = useAxiosPublic()
-
-
 
     const { data: blogs = [], isPending: loading, refetch } = useQuery({
         queryKey: ['blogs'],
@@ -18,15 +18,17 @@ const ContentManagement = () => {
             return res.data;
         },
     });
-    const [filterOption, setFilterOption] = useState('all'); // 'all', 'draft', 'published'
 
+    const [filterOption, setFilterOption] = useState('all'); // 'all', 'draft', 'published'
     const filteredBlogs = blogs.filter(blog => {
         if (filterOption === 'all') {
-            return true; // Show all blogs
+            return true; 
         } else {
-            return blog.status === filterOption; // Show blogs based on the selected filter option
+            return blog.status === filterOption; 
         }
     });
+
+    
     const handleDeleteBlog = (id) => {
         console.log(id)
         Swal.fire({
@@ -65,11 +67,11 @@ const ContentManagement = () => {
             const response = await axiosPublic.patch(`/publishPost/${_id}`, { status });
             console.log(response.data);
             if (response.data.modifiedCount > 0) {
-                
+
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
-                    title: ` successfully published`,
+                    title: ` successfully updated status`,
                     showConfirmButton: false,
                     timer: 1500
                 })
@@ -90,16 +92,15 @@ const ContentManagement = () => {
                 </Link>
             </div>
             <div className="overflow-x-auto">
-
                 <table className="table w-full">
                     {/* head */}
                     <thead>
-                        <tr>
-
+                        <tr className="text-base">
                             <th>Blog Title</th>
                             <th>Blog</th>
-                            <th>Delete Blog</th>
-                            <th>Publish</th>
+                            {isAdmin&&(
+                            <th>Delete Blog</th>)}
+                            {isAdmin&&(<th>Publish</th>)}
                             <th>
                                 <label htmlFor="filterOption">Filter:</label>
                                 <select
@@ -129,22 +130,24 @@ const ContentManagement = () => {
                                     {blog.content}
                                 </td>
 
+                                {isAdmin&&(
                                 <td>
                                     <button
                                         onClick={() => handleDeleteBlog(blog._id)}
                                         className="btn btn-ghost btn-lg">
                                         <FaTrashAlt className="text-red-600"></FaTrashAlt>
                                     </button>
-                                </td>
+                                </td>)}
+
+                                {isAdmin&&(
                                 <td>
                                     <button
-                                        className="btn btn-sm bg-green-400"
-                                        onClick={() => handlePublish({ status: 'published', _id: blog._id })}
-                                        disabled={blog.status === 'published'}
+                                        className={`btn btn-sm ${blog.status === 'draft' ? 'bg-green-400' : 'bg-red-400'}`}
+                                        onClick={() => handlePublish({ status: blog.status === 'draft' ? 'published' : 'draft', _id: blog._id })}
                                     >
-                                         {blog.status === 'published' ? 'published' : 'Publish'}
+                                        {blog.status === 'draft' ? 'Publish' : 'Unpublish'}
                                     </button>
-                                </td>
+                                </td>)}
 
                             </tr>)
 
@@ -153,9 +156,8 @@ const ContentManagement = () => {
 
 
                 </table>
+                </div>
             </div>
-
-        </div>
     );
 };
 

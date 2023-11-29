@@ -44,6 +44,31 @@ const UserHome = () => {
             }
         });
     }
+
+
+    const handleStatusChange = async ({ status, _id }) => {
+        console.log(status);
+        try {
+            const response = await axiosPublic.patch(`/doneCancel/${_id}`, { status });
+
+            // Check if the update was successful based on the server response
+            if (response.data && response.data.modifiedCount > 0) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'Volunteer role added',
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                refetch();
+            } else {
+                // Handle other cases where the update was not successful
+                console.log('Update was not successful:', response.data);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
     return (
         <div>
             <h2 className="text-3xl">
@@ -53,79 +78,104 @@ const UserHome = () => {
                 }
 
             </h2>
-            <div className="overflow-x-auto">
-                <div className="text-2xl font-bold text-center border-b-4 border-teal-400 p-2">
-                    My Donation Request
-                </div>
-                <table className="table w-full">
-                    {/* head */}
-                    <thead>
-                        <tr>
-                            <th>
-                                Recipient Name
-                            </th>
-                            <th>Location(DIst | Upz)</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Donation Status</th>
-                            <th>Donor Info</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                            <th>View</th>
+            {
+                donationRequest?.length > 0 ?
+                    <div className="overflow-x-auto">
+                        <div className="text-2xl font-bold text-center border-b-4 border-teal-400 p-2">
+                            My Donation Request
+                        </div>
+                        <table className="table w-full">
+                            {/* head */}
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Recipient Name
+                                    </th>
+                                    <th>Location (Dist | Upz)</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Donation Status</th>
+                                    <th>Donor Info</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                    <th>View</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                           donationRequest.slice(-3).map((info, index) => <tr key={info._id}>
-                                <td>
-                                    {info.reciName}
-                                </td>
-                                <td>
-                                    {info.reciDistrict} | {info.reciUpazila}
-                                </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    donationRequest?.slice(-3).map((info, index) => <tr key={info._id}>
+                                        <td>
+                                            {info.reciName}
+                                        </td>
+                                        <td>
+                                            {info.reciDistrict} | {info.reciUpazila}
+                                        </td>
 
-                                <td>
-                                    {info.donationDate}
-                                </td>
-                                <td>
-                                    {info.donationTime}
-                                </td>
-                                <td>
-                                    {info.donationStatus}
-                                </td>
-                                <td>
-                                    #
-                                </td>
+                                        <td>
+                                            {info.donationDate}
+                                        </td>
+                                        <td>
+                                            {info.donationTime}
+                                        </td>
+                                        <td>
+                                            {info.donationStatus === 'inprogress' ? (
+                                                <>
+                                                    {/* <span>{info.donationStatus}</span> */}
+                                                    <select
+                                                        onChange={(e) => handleStatusChange({ status: e.target.value, _id: info._id })}
+                                                        value=""
+                                                        style={{ marginLeft: '5px' }}
+                                                    >
+                                                        <option value="" disabled>{info.donationStatus}</option>
+                                                        <option value="cancel">Cancel</option>
+                                                        <option value="done">Done</option>
+                                                    </select>
+                                                </>
+                                            ) : (
+                                                <span className={`${info.donationStatus === 'done' ? 'bg-green-300 rounded-sm px-1' : info.donationStatus === 'cancel' ? 'bg-red-300 rounded-sm px-1' : 'bg-yellow-300 rounded-sm px-1'}`}>{info.donationStatus}</span>
+                                            )}
+                                        </td>
+                                        <td>
+                                            {info.donationStatus === 'inprogress' ? `${info.donorName}   ${info.donorEmail}` : ''}
+                                        </td>
 
-                                <td>
-                                    <Link to={`/dashboard/editInfo/${info._id}`}>
-                                        <button
-                                            className="btn btn-ghost btn-lg bg-orange-500">
-                                            <FaEdit className="text-white "></FaEdit>
-                                        </button>
-                                    </Link>
-                                </td>
-                                <td>
-                                    <button
-                                        onClick={() => handleDeleteinfo(info)}
-                                        className="btn btn-ghost btn-lg">
-                                        <FaTrashAlt className="text-red-600"></FaTrashAlt>
-                                    </button>
-                                </td>
-                                <td>
-                                    <Link to={`/donationRequestDetails/${info._id}`}>
-                                        <button className="btn btn-ghost btn-sm">
-                                            view
-                                        </button></Link>
-                                </td>
-                            </tr>)
-                        }
-                    </tbody>
+                                        <td>
+                                            <Link to={`/dashboard/editInfo/${info._id}`}>
+                                                <button
+                                                    className="btn btn-ghost btn-lg bg-orange-500">
+                                                    <FaEdit className="text-white 
+                                        "></FaEdit>
+                                                </button>
+                                            </Link>
+                                        </td>
+                                        <td>
+                                            <button
+                                                onClick={() => handleDeleteinfo(info)}
+                                                className="btn btn-ghost btn-lg">
+                                                <FaTrashAlt className="text-red-600"></FaTrashAlt>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <Link to={`/donationRequestDetails/${info._id}`}>
+                                                <button className="btn btn-ghost btn-sm">
+                                                    view
+                                                </button></Link>
+                                        </td>
+                                    </tr>)
+                                }
+                            </tbody>
 
 
-                </table>
-            </div>
+                        </table >
+                        <div className="flex justify-center mt-4">
+                            <Link to='/dashboard/mydonationRequest'>
+                                <button className="btn btn-sm md:btn-md bg-teal-300">view my all request</button>
+                            </Link>
+                        </div>
+                    </div>
+                    : ''
+            }
         </div>
     );
 };

@@ -1,14 +1,13 @@
-import { FaAd, FaEnvelope, FaHome, FaList, FaShoppingCart, FaUser, FaUtensils, FaVoicemail } from "react-icons/fa";
+import { FaAd, FaCircle, FaEnvelope, FaHome, FaList, FaReact, FaShoppingCart, FaUser, FaUtensils, FaVoicemail } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
 import useAdmin from "../../hooks/useAdmin";
 import useDonationRequest from "../../hooks/useDonationRequest";
-
-
-
+import useVolunteer from "../../hooks/useVolunteer";
 
 const Dashboard = () => {
-     const [donationRequest] = useDonationRequest()
+    const [donationRequest] = useDonationRequest()
     const [isAdmin] = useAdmin()
+    const [isVolunteer] = useVolunteer()
 
     return (
         <div className="flex">
@@ -16,11 +15,12 @@ const Dashboard = () => {
             <div className="w-64 min-h-screen bg-teal-400">
                 <ul className="menu p-4 ">
                     {
-                        isAdmin ? <>
+                        // isVolunteerLoading? <span className="loading loading-spinner text-red-500"></span>:
+                        isAdmin || isVolunteer ? <>
                             <li>
                                 <NavLink to="/dashboard/adminHome">
                                     <FaHome></FaHome>
-                                    Admin Home</NavLink>
+                                    {isAdmin ? 'Admin Home' : 'Volunteer Home'}</NavLink>
                             </li>
                             <li className="my-2">
                                 <NavLink to="/dashboard/users">
@@ -29,7 +29,7 @@ const Dashboard = () => {
                             </li>
                             <li className="my-3">
                                 <NavLink to="/dashboard/allDonationRequest">
-                                    <FaUtensils></FaUtensils>
+                                    <FaCircle className="text-red-500"></FaCircle>
                                     All Blood Donation Request</NavLink>
                             </li>
                             <li>
@@ -37,29 +37,30 @@ const Dashboard = () => {
                                     <FaList></FaList>
                                     Content Management</NavLink>
                             </li>
-                           
-                           
-
                         </>
+
                             :
+
                             <>
                                 <li>
                                     <NavLink to="/dashboard/userHome">
                                         <FaHome></FaHome>
                                         User Home</NavLink>
                                 </li>
-                               
+
                                 <li>
                                     <NavLink to="/dashboard/myDonationrequest">
                                         <FaShoppingCart></FaShoppingCart>
                                         My Donation Request ({donationRequest.length})</NavLink>
                                 </li>
-                                <li>
+                               <li>
                                     <NavLink to="/dashboard/createDonationRequest">
                                         <FaAd></FaAd>
                                         Create Donation Request</NavLink>
                                 </li>
-                               
+                                    
+                                
+
                             </>
                     }
 
@@ -78,11 +79,7 @@ const Dashboard = () => {
                             <FaUser></FaUser>
                             My Profile</NavLink>
                     </li>
-                    <li>
-                        <NavLink to="/order/contact">
-                            <FaEnvelope></FaEnvelope>
-                            Contact</NavLink>
-                    </li>
+
                 </ul>
             </div>
             {/* dashboard content */}

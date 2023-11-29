@@ -72,6 +72,7 @@ const Register = () => {
 
     const onSubmit = async (data) => {
         
+        
         const imageFile = { image: data.image[0] };
         const res = await axiosPublic.post(image_hosting_api, imageFile, {
             headers: {
@@ -81,9 +82,6 @@ const Register = () => {
         
         const selectedUpazilaObj = filteredUpazilas.find((upazila) => upazila.id === data.upazila);
        const selectedUpazilaName = selectedUpazilaObj ? selectedUpazilaObj.name : '';
-    
-
-
         
         if (res.data.success) {
             const photoURL = res.data.data.display_url;
@@ -96,7 +94,6 @@ const Register = () => {
                     .then(() => {
                         console.log('name added updated')
                     })
-
         })
 
         if (res.data.success) {
@@ -112,20 +109,35 @@ const Register = () => {
                 role: 'donor'
             };
             console.log(user)
-
-            const userRes = await axiosPublic.post('/users', user);
-
-            if (userRes.data.insertedId) {
-                reset();
-                Swal.fire({
+            try {
+                const userRes = await axiosPublic.post('/users', user);
+              
+                if (userRes.data.insertedId) {
+                  reset();
+                  Swal.fire({
                     position: 'top-end',
                     icon: 'success',
-                    title: 'Registration Successfull',
+                    title: 'Registration Successful',
                     showConfirmButton: false,
                     timer: 1500,
-                });
-                navigate('/')
-            }
+                  });
+                  navigate('/');
+                }
+              } catch (error) {
+                // Check if the error response contains information about an existing user
+                if (error.response && error.response.status === 400 && error.response.data.error === 'User with this email already exists') {
+                  Swal.fire({
+                    icon: 'warning',
+                    title: 'Registration Failed',
+                    text: 'User with this email already exists',
+                    showConfirmButton: true,
+                  });
+                } else {
+                  // Handle other errors
+                  console.error('Error during registration:', error);
+                }
+              }
+              
         }
     };
 

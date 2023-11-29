@@ -1,11 +1,8 @@
 import { Link } from "react-router-dom";
 import useDonationRequestPublic from "../../hooks/useDonationRequestPublic";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
 const DonationRequest = () => {
     const [AllDonationRequest ,isLoading,refetch] = useDonationRequestPublic();
-    const axiosSecure = useAxiosSecure();
-    const axiosPublic = useAxiosPublic();
+ 
 
 
     return (
@@ -32,7 +29,7 @@ const DonationRequest = () => {
                         <tbody>
                             {
                                 isLoading? <span className="loading loading-spinner text-secondary"></span>
-                                :AllDonationRequest.map((info, index) => <tr key={info._id}>
+                                :AllDonationRequest.filter(filtered=>filtered.donationStatus==='pending').map((info, index) => <tr key={info._id}>
                                 <td>
                                     {info.reqName}
                                 </td>

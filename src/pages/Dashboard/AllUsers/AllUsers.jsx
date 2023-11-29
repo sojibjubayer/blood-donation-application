@@ -31,7 +31,7 @@ const AllUsers = () => {
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
-                    title: ` blocked now`,
+                    title: ` status changed`,
                     showConfirmButton: false,
                     timer: 1500
                 })

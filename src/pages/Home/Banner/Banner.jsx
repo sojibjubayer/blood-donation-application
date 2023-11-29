@@ -10,7 +10,8 @@ const Banner = () => {
           <h1 className="text-4xl font-bold mb-4">Donate blood, save lives.</h1>
           <div className="flex flex-col ">
             <button className="bg-[#00B3C7]  text-2xl font-semibold text-white rounded-md p-1"><Link to='/registration'>Join as a donor</Link></button>
-            <button className="bg-[#00B3C7]  text-2xl font-semibold mt-4 text-white rounded-md p-1">Search donors</button>
+            <button className="bg-[#00B3C7]  text-2xl font-semibold mt-4 text-white rounded-md p-1">
+            <Link to='/searchDonors'>Search donors</Link> </button>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../providers/AuthProvider';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
 import Swal from 'sweetalert2';
@@ -9,26 +9,26 @@ const DonationRequestDetails = () => {
         donationDate, donationTime, requestMessage, donationStatus } = useLoaderData()
     const { user } = useContext(AuthContext);
     const axiosPublic = useAxiosPublic()
+    const navigate = useNavigate()
+
 
 
 
     const handleProgress = async (event) => {
         event.preventDefault()
-      
-
+        console.log(event)
         const requestInfo = {
-        
-            donationStatus: 'inprogress'
-
+            donationStatus: 'inprogress',
+            donorName:user.displayName,
+            donorEmail:user.email
 
         };
-        // console.log(requestInfo)
+        console.log(requestInfo)
 
         const infoRes = await axiosPublic.patch(`/confirmDonation/${_id}`, requestInfo);
         console.log(infoRes.data)
         if (infoRes.data.modifiedCount > 0) {
-            // show success popup
-            // reset();
+          
             Swal.fire({
                 position: "top-end",
                 icon: "success",
@@ -36,6 +36,8 @@ const DonationRequestDetails = () => {
                 showConfirmButton: false,
                 timer: 1500
             });
+            navigate('/donationRequest')
+
         }
 
     }
@@ -120,7 +122,7 @@ const DonationRequestDetails = () => {
                 <dialog id="my_modal" className="modal">
                     <div className="modal-box">
                         <form method="dialog">
-                            {/* if there is a button in form, it will close the modal */}
+                            
                             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                         </form>
 
@@ -136,7 +138,7 @@ const DonationRequestDetails = () => {
                                             <span className="label-text">Donor Name </span>
                                         </label>
                                         <label className="input-group">
-                                            <input type="text" name="SPEmail" defaultValue={user?.displayName} className="w-full input input-bordered" readOnly />
+                                            <input type="text" name="name" defaultValue={user?.displayName} className="w-full input input-bordered" readOnly />
                                         </label>
                                     </div>
                                     <div className="form-control ">
@@ -144,7 +146,7 @@ const DonationRequestDetails = () => {
                                             <span className="label-text">Donor Email </span>
                                         </label>
                                         <label className="input-group">
-                                            <input type="text" name="userEmail" defaultValue={user?.email} className="w-full input input-bordered" readOnly />
+                                            <input type="text" name="email" defaultValue={user?.email} className="w-full input input-bordered" readOnly />
                                         </label>
                                     </div>
 

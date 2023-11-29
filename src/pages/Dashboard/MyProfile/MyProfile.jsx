@@ -24,7 +24,7 @@ const MyProfile = () => {
             <div className="card w-96 mx-auto bg-base-100 shadow-xl">
 
                 {
-                    allUsers.filter(filterUser => filterUser.email === user.email).map(user =>
+                    allUsers?.filter(filterUser => filterUser.email === user.email).map(user =>
                         <div key={user._id} className="card-body">
                             <div className="avatar">
                                 <div className="w-24 mx-auto rounded">
