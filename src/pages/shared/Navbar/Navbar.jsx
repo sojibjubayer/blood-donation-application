@@ -33,6 +33,9 @@ const NavBar = () => {
             user && !isAdmin && isVolunteer && <li><Link to="/dashboard">Dashboard</Link></li>
         }
         {
+            user &&  <li><Link to="/fundings">Fundings</Link></li>
+        }
+        {
             (user && !isAdmin && !isVolunteer) && <li><Link to="/dashboard/userHome">Dashboard</Link></li>
         }
         {
@@ -52,15 +55,15 @@ const NavBar = () => {
 
     return (
         <>
-            <div className="navbar fixed z-10 bg-opacity-90 max-w-screen-xl bg-red-600 text-white border-b-4 border-[#00B3C7]">
+            <div className="navbar fixed z-10  max-w-screen-xl bg-red-600 text-white border-b-4 border-[#00B3C7]">
 
                 <div className="navbar-start">
                     <div className="dropdown">
                         <label tabIndex={0} className="btn btn-ghost lg:hidden">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                         </label>
-                        <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
-                            {navOptions}
+                        <ul tabIndex={0} className="menu menu-compact text-black border-b-2 border-white dropdown-content mt-3 p-2 shadow bg-teal-400 rounded-b-md w-52">
+                        {navOptions}
                         </ul>
                     </div>
                     <div>

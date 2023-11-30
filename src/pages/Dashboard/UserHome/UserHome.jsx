@@ -84,7 +84,7 @@ const UserHome = () => {
                         <div className="text-2xl font-bold text-center border-b-4 border-teal-400 p-2">
                             My Donation Request
                         </div>
-                        <table className="table w-full">
+                        <table className="table w-full pt-8">
                             {/* head */}
                             <thead>
                                 <tr>

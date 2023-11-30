@@ -2,17 +2,13 @@
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
-
 import useDonationRequest from "../../../hooks/useDonationRequest";
-import useAxiosPublic from "../../../hooks/useAxiosPublic";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { useState } from "react";
-
-
 
 const MyDonationRequest = () => {
     const [donationRequest, refetch] = useDonationRequest();
-    
-    const axiosPublic = useAxiosPublic();
+    const axiosSecure = useAxiosSecure();
 
     //filtering
     const [filterOption, setFilterOption] = useState('all'); // 'all', 'draft', 'published'
@@ -37,7 +33,7 @@ const MyDonationRequest = () => {
             confirmButtonText: "Yes, delete it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const res = await axiosPublic.delete(`/donationRequest/${info._id}`);
+                const res = await axiosSecure.delete(`/donationRequest/${info._id}`);
                 console.log(res.data);
                 if (res.data.deletedCount > 0) {
                     // refetch to update the ui
@@ -60,7 +56,7 @@ const MyDonationRequest = () => {
     const handleStatusChange = async ({ status, _id }) => {
         console.log(status);
         try {
-          const response = await axiosPublic.patch(`/doneCancel/${_id}`, { status });
+          const response = await axiosSecure.patch(`/doneCancel/${_id}`, { status });
       
           // Check if the update was successful based on the server response
           if (response.data && response.data.modifiedCount>0) {

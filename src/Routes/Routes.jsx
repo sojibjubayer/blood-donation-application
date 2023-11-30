@@ -13,7 +13,6 @@ import AdminHome from "../pages/Dashboard/AdminHome/AdminHome";
 import MyDonationRequest from "../pages/Dashboard/MyDonationRequest/MyDonationRequest";
 import CreateDonationRequest from "../pages/Dashboard/CreateDonationRequest/CreateDonationRequest";
 import EditDonationRequest from "../pages/Dashboard/EditDonationRequest/EditDonationRequest"
-
 import ContentManagement from "../pages/Dashboard/ContentManagement/ContentManagement";
 import AllUsers from "../pages/Dashboard/AllUsers/AllUsers";
 import DonationRequestDetails from "../pages/DonationRequestDetails/DonationRequestDetails";
@@ -24,6 +23,7 @@ import AllDonationRequest from "../pages/Dashboard/AllDonationRequest/AllDonatio
 import AddBlog from "../pages/Dashboard/AddBlog/AddBlog";
 import Blogs from "../pages/Blogs/Blogs";
 import SearchPage from "../pages/SearchPage/SearchPage";
+import NotFound from "../pages/NotFound/NotFound";
 
 
 
@@ -32,6 +32,7 @@ import SearchPage from "../pages/SearchPage/SearchPage";
     {
       path: "/",
       element: <Main></Main>,
+      errorElement:<NotFound></NotFound>,
       children: [
         {
             path: '/',
@@ -56,7 +57,7 @@ import SearchPage from "../pages/SearchPage/SearchPage";
         //DONATION DETAILS PAGE
         {
           path:'donationRequestDetails/:id',
-          element:<DonationRequestDetails></DonationRequestDetails>,
+          element:<PrivateRoute><DonationRequestDetails></DonationRequestDetails></PrivateRoute>,
           loader: ({params}) => fetch(`http://localhost:5000/donationRequests/${params.id}`)
 
         },
@@ -77,29 +78,29 @@ import SearchPage from "../pages/SearchPage/SearchPage";
         //normal user routes
         {
           path:'userHome',
-          element:<UserHome></UserHome>
+          element:<PrivateRoute><UserHome></UserHome></PrivateRoute>
 
         },
         {
           path: 'myDonationrequest',
-          element: <MyDonationRequest></MyDonationRequest>
+          element: <PrivateRoute><MyDonationRequest></MyDonationRequest></PrivateRoute>
         },
         {
           path: 'createDonationRequest',
-          element: <CreateDonationRequest></CreateDonationRequest>
+          element: <PrivateRoute><CreateDonationRequest></CreateDonationRequest></PrivateRoute>
         },
         {
           path: 'editInfo/:id',
-          element: <EditDonationRequest></EditDonationRequest>,
+          element: <PrivateRoute><EditDonationRequest></EditDonationRequest></PrivateRoute>,
           loader: ({params}) => fetch(`http://localhost:5000/donationRequests/${params.id}`)
         },
         {
           path:'profile',
-          element:<MyProfile></MyProfile>
+          element:<PrivateRoute><MyProfile></MyProfile></PrivateRoute>
         },
         {
           path: 'updateProfile/:id',
-          element: <UpdateProfile></UpdateProfile>,
+          element: <PrivateRoute><UpdateProfile></UpdateProfile></PrivateRoute>,
           loader: ({params}) => fetch(`http://localhost:5000/allUsers/${params.id}`)
         },
       

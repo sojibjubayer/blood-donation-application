@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../../../providers/AuthProvider';
-import useAxiosPublic from '../../../hooks/useAxiosPublic';
 import { clear } from 'localforage';
 import { useQuery } from '@tanstack/react-query';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 
 
@@ -16,19 +16,28 @@ const CreateDonationRequest = () => {
     const { user } = useContext(AuthContext);
 
 
-    const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
-
-
     const { register, handleSubmit, reset, formState } = useForm();
 
-    const axiosPublic = useAxiosPublic();
+  
+    const axiosSecure = useAxiosSecure();
+    const {  data: allUsers = [], isLoading } = useQuery({
+        queryKey: ['allUsers'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/allUsers');
+            return res.data;
+        }
+    })
 
+    const dbUser=allUsers?.filter(filtered=>filtered.email===user.email)
+    const status=dbUser[0]?.status;
+    const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+  
 
         // GETTING DISTRICT AND UPAZILA 
-    const { data: districts = [], isPending: loading, refetch } = useQuery({
+    const { data: districts = [] } = useQuery({
         queryKey: ['districts'],
         queryFn: async () => {
-            const res = await axiosPublic.get('/districts');
+            const res = await axiosSecure.get('/districts');
             return res.data;
         },
     });
@@ -36,7 +45,7 @@ const CreateDonationRequest = () => {
     const { data: upazilas = [] } = useQuery({
         queryKey: ['upazilas'],
         queryFn: async () => {
-            const res = await axiosPublic.get('/upazilas');
+            const res = await axiosSecure.get('/upazilas');
             return res.data;
         },
     });
@@ -88,7 +97,7 @@ const CreateDonationRequest = () => {
             };
             console.log(requestInfo)
 
-            const requestInfoRes = await axiosPublic.post('/donationRequest', requestInfo);
+            const requestInfoRes = await axiosSecure.post('/donationRequest', requestInfo);
 
             if (requestInfoRes.data.insertedId) {
                 reset();
@@ -107,7 +116,9 @@ const CreateDonationRequest = () => {
 
     return (
         <div className=" p3-4 bg-teal-600">
-            <form onSubmit={handleSubmit(onSubmit)} className=" mx-auto mt-0 p-4 mb-10 rounded-lg bg-white">
+            
+             {
+                status!=='blocked'? <form onSubmit={handleSubmit(onSubmit)} className=" mx-auto mt-0 p-4 mb-10 rounded-lg bg-white">
                 <div className="text-2xl font-bold text-center border-b-4 border-teal-400">Create Donation Request</div>
                 <div className="form-control w-full my-6">
                     <label className="label">
@@ -209,6 +220,9 @@ const CreateDonationRequest = () => {
 
               
             </form>
+            :''
+             }
+         
         </div>
     );
 };

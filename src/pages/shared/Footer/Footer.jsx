@@ -8,7 +8,7 @@ const Footer = () => {
                 <p className="font-bold text-xl">
                     BDA <br /> Blood Donation Application<br />
                 </p>
-                <p className='w-[30%] mx-auto'> Blood Donation Application is an automated blood service that connects blood searchers 
+                <p className='lg:w-[30%] mx-auto'> Blood Donation Application is an automated blood service that connects blood searchers 
                     with voluntary blood donors in a moment through SMS and website.</p>
             </aside>
             <nav>

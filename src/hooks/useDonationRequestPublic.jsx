@@ -6,12 +6,9 @@ import useAuth from "./useAuth";
 import useAxiosPublic from "./useAxiosPublic";
 
 const useDonationRequest = () => {
-    const axiosSecure = useAxiosSecure();
     const axiosPublic = useAxiosPublic()
-    const { user} = useAuth();
-    console.log(user?.email)
     const { refetch, data: AllDonationRequest = [],isLoading } = useQuery({
-        queryKey: ['donationRequest', user?.email],
+        queryKey: ['donationRequest'],
         queryFn: async() => {
             const res = await axiosPublic.get('/AlldonationRequests');
             return res.data;

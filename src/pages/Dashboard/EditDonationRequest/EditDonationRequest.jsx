@@ -4,9 +4,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../../../providers/AuthProvider';
-import useAxiosPublic from '../../../hooks/useAxiosPublic';
 import { useQuery } from '@tanstack/react-query';
 import { useLoaderData } from 'react-router-dom';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 
 
@@ -14,23 +14,18 @@ import { useLoaderData } from 'react-router-dom';
 const EditDonationRequest = () => {
     const { user } = useContext(AuthContext);
     const { _id } = useLoaderData()
-    console.log( _id )
-
-
 
     const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
-
     const { register, handleSubmit, reset, formState } = useForm();
 
-    const axiosPublic = useAxiosPublic();
-
+    const axiosSecure = useAxiosSecure()
 
         // GETTING DISTRICT AND UPAZILA 
     const { data: districts = [], isPending: loading, refetch } = useQuery({
         queryKey: ['districts'],
         queryFn: async () => {
-            const res = await axiosPublic.get('/districts');
+            const res = await axiosSecure.get('/districts');
             return res.data;
         },
     });
@@ -38,7 +33,7 @@ const EditDonationRequest = () => {
     const { data: upazilas = [] } = useQuery({
         queryKey: ['upazilas'],
         queryFn: async () => {
-            const res = await axiosPublic.get('/upazilas');
+            const res = await axiosSecure.get('/upazilas');
             return res.data;
         },
     });
@@ -91,7 +86,7 @@ const EditDonationRequest = () => {
             };
             console.log(requestInfo)
 
-            const infoRes = await axiosPublic.patch(`/donationRequests/${_id}`, requestInfo);
+            const infoRes = await axiosSecure.patch(`/editDonationRequests/${_id}`, requestInfo);
             console.log(infoRes.data)
             if(infoRes.data.modifiedCount > 0){
                 // show success popup

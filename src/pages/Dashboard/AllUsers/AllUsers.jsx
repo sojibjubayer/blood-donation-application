@@ -1,20 +1,19 @@
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom";
-import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 import { AuthContext } from "../../../providers/AuthProvider";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 
 const AllUsers = () => {
-    const axiosPublic = useAxiosPublic()
+  
+    const axiosSecure  =useAxiosSecure()
     const { user: adminUser } = useContext(AuthContext)
 
     const { refetch, data: allUsers = [], isLoading } = useQuery({
         queryKey: ['allUsers'],
         queryFn: async () => {
-            const res = await axiosPublic.get('/allUsers');
+            const res = await axiosSecure.get('/allUsers');
             return res.data;
         }
     })
@@ -24,7 +23,7 @@ const AllUsers = () => {
 
         try {
 
-            const response = await axiosPublic.patch(`/activeBlock/${_id}`, { status });
+            const response = await axiosSecure.patch(`/activeBlock/${_id}`, { status });
             console.log(response.data);
             if (response.data.modifiedCount > 0) {
                 refetch()
@@ -46,7 +45,7 @@ const AllUsers = () => {
     const handleMakeVolunteer = async ({ role, _id }) => {
         try {
 
-            const response = await axiosPublic.patch(`/makeVolunteer/${_id}`, { role });
+            const response = await axiosSecure.patch(`/makeVolunteer/${_id}`, { role });
             
             if (response.data.modifiedCount > 0) {
           
@@ -72,7 +71,7 @@ const AllUsers = () => {
 
         try {
 
-            const response = await axiosPublic.patch(`/makeAdmin/${_id}`, { role });
+            const response = await axiosSecure.patch(`/makeAdmin/${_id}`, { role });
             console.log(response.data);
             if (response.data.modifiedCount > 0) {
                 refetch()

@@ -1,25 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import useAxiosPublic from "../../../hooks/useAxiosPublic";
 import { FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import useAdmin from "../../../hooks/useAdmin";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 
 const ContentManagement = () => {
     const [isAdmin] = useAdmin()
-    const axiosPublic = useAxiosPublic()
+    const axiosSecure = useAxiosSecure()
 
     const { data: blogs = [], isPending: loading, refetch } = useQuery({
         queryKey: ['blogs'],
         queryFn: async () => {
-            const res = await axiosPublic.get('/blogs');
+            const res = await axiosSecure.get('/blogs');
             return res.data;
         },
     });
 
-    const [filterOption, setFilterOption] = useState('all'); // 'all', 'draft', 'published'
+    const [filterOption, setFilterOption] = useState('all'); 
     const filteredBlogs = blogs.filter(blog => {
         if (filterOption === 'all') {
             return true; 
@@ -30,7 +30,6 @@ const ContentManagement = () => {
 
     
     const handleDeleteBlog = (id) => {
-        console.log(id)
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -41,18 +40,19 @@ const ContentManagement = () => {
             confirmButtonText: "Yes, delete it!"
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const res = await axiosPublic.delete(`/deleteBlog/${id}`);
+                const res = await axiosSecure.delete(`/deleteBlog/${id}`);
                 console.log(res.data);
                 if (res.data.deletedCount > 0) {
-                    // refetch to update the ui
-                    refetch();
+                   
                     Swal.fire({
                         position: "top-end",
                         icon: "success",
-                        title: ' Blog been deleted',
+                        title: ' Blog has been deleted',
                         showConfirmButton: false,
                         timer: 1500
                     });
+                    refetch();
+
                 }
 
 
@@ -64,14 +64,14 @@ const ContentManagement = () => {
 
         try {
 
-            const response = await axiosPublic.patch(`/publishPost/${_id}`, { status });
+            const response = await axiosSecure.patch(`/publishPost/${_id}`, { status });
             console.log(response.data);
             if (response.data.modifiedCount > 0) {
 
                 Swal.fire({
                     position: "top-end",
                     icon: "success",
-                    title: ` successfully updated status`,
+                    title: ` successfully updated`,
                     showConfirmButton: false,
                     timer: 1500
                 })
@@ -120,9 +120,8 @@ const ContentManagement = () => {
                     </thead>
                     <tbody>
                         {
-                            //  isLoading? <span className="loading loading-spinner text-secondary"></span>
-                            //  :
-                            filteredBlogs.map((blog, index) => <tr key={blog._id}>
+                           
+                            filteredBlogs?.map((blog, index) => <tr key={blog._id}>
                                 <td>
                                     {blog.title}
                                 </td>

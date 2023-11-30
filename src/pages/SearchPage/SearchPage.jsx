@@ -1,29 +1,31 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import Swal from 'sweetalert2';
-
 
 import useAxiosPublic from '../../hooks/useAxiosPublic';
-
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
-const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+
 
 const SearchPage = () => {
 
-    const navigate = useNavigate()
+    const axiosPublic = useAxiosPublic()
+    const[displayDonors,setDisplayDonors]=useState();
+  
+   
     const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
+    const { register, handleSubmit } = useForm();
 
+    const {  data: allUsers = [], isLoading } = useQuery({
+        queryKey: ['allUsers'],
+        queryFn: async () => {
+            const res = await axiosPublic.get('/users');
+            return res.data;
+        }
+    })
+   
 
-    const { register, handleSubmit, reset, formState } = useForm();
-
-    const axiosPublic = useAxiosPublic();
-
-    const { data: districts = [], isPending: loading, refetch } = useQuery({
+    const { data: districts = [] } = useQuery({
         queryKey: ['districts'],
         queryFn: async () => {
             const res = await axiosPublic.get('/districts');
@@ -64,15 +66,26 @@ const SearchPage = () => {
 
 
     const onSubmit = async (data) => {
-
-
-
-
-
-
-
-
-    };
+        const { bloodGroup } = data;
+        const selectedUpazilaObj = filteredUpazilas.find((upazila) => upazila.id === data.upazila);
+        const selectedUpazilaName = selectedUpazilaObj ? selectedUpazilaObj.name : '';
+        
+        console.log(bloodGroup,selectedUpazilaName,selectedDistrictName)
+      
+        const filteredDonors = allUsers.filter((user) => {
+       
+          const bloodGroupMatch = bloodGroup ? user.bloodGroup === bloodGroup : true;
+      
+          const districtMatch = selectedDistrictName ? user.district === selectedDistrictName : true;
+      
+          const upazilaMatch = selectedUpazilaName ? user.upazila === selectedUpazilaName : true;
+      
+          // Return true only if all three criteria match the selected values
+          return bloodGroupMatch && districtMatch && upazilaMatch;
+        });
+      
+        setDisplayDonors(filteredDonors);
+      };
 
     return (
         <div className="pt-24 pb-4  min-h-screen">
@@ -103,7 +116,7 @@ const SearchPage = () => {
                                 <option disabled value="default">
                                     Select a district
                                 </option>
-                                {districts.map((district) => (
+                                {districts?.map((district) => (
                                     <option key={district._id} value={district.id}>
                                         {district.name}
                                     </option>
@@ -127,12 +140,7 @@ const SearchPage = () => {
                                 ))}
                             </select>
                         </div>
-                        <div className="form-control w-full my-6">
-                            <label className="label">
-                                <span className="label-text">Email*</span>
-                            </label>
-                            <input type="text" placeholder="Email" {...register('email', { required: true })} required className="input input-bordered w-full" />
-                        </div>
+                        
                     </div>
                     <div>
                         <button className="btn btn-md mt-10 bg-red-300 hover:bg-green-300 ">search</button>
@@ -145,11 +153,61 @@ const SearchPage = () => {
 
 
             {/*  DISPLAY SEARCH DATA */}
-            <div>
-                {
-                   
-                }
-            </div>
+            <div className="overflow-x-auto">
+                    <div className="text-center text-2xl font-semibold border-b-4 border-teal-400 py-3">
+                        Total Donors:{isLoading?<span class="loading loading-ring loading-md"></span>:allUsers?.length}
+                    </div>
+                    <table className="table w-full">
+                        {/* head */}
+                        <thead>
+                            <tr>
+                                <th>User Avater </th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Blood Group</th>
+                                <th>District</th>
+                                <th>Upazila</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                displayDonors?.map((user, index) => <tr key={user._id}>
+
+                                    <td>
+                                        <div className="flex users-center gap-3">
+                                            <div className="avatar">
+                                                <div className="mask mask-squircle w-12 h-12">
+                                                    <img src={user.image} alt="Avatar Tailwind CSS Component" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {user.name}
+                                    </td>
+                                    <td>
+                                        {user.email}
+                                    </td>
+                                    <td>
+                                        {user.bloodGroup}
+                                    </td>
+                                    <td>
+                                        {user.district}
+                                    </td>
+                                    <td>
+                                        {user.upazila}
+                                    </td>
+                                   
+                                   
+
+                                </tr>)
+                            }
+                        </tbody>
+
+
+                    </table>
+                </div>
 
         </div>
     );

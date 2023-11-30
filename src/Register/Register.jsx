@@ -71,6 +71,7 @@ const Register = () => {
   
 
     const onSubmit = async (data) => {
+        console.log(data)
         
         
         const imageFile = { image: data.image[0] };
