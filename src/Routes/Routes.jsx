@@ -58,7 +58,7 @@ import NotFound from "../pages/NotFound/NotFound";
         {
           path:'donationRequestDetails/:id',
           element:<PrivateRoute><DonationRequestDetails></DonationRequestDetails></PrivateRoute>,
-          loader: ({params}) => fetch(`http://localhost:5000/donationRequests/${params.id}`)
+          loader: ({params}) => fetch(`https://bda-server.vercel.app/donationRequests/${params.id}`)
 
         },
         {
@@ -92,7 +92,7 @@ import NotFound from "../pages/NotFound/NotFound";
         {
           path: 'editInfo/:id',
           element: <PrivateRoute><EditDonationRequest></EditDonationRequest></PrivateRoute>,
-          loader: ({params}) => fetch(`http://localhost:5000/donationRequests/${params.id}`)
+          loader: ({params}) => fetch(`https://bda-server.vercel.app/donationRequests/${params.id}`)
         },
         {
           path:'profile',
@@ -101,7 +101,7 @@ import NotFound from "../pages/NotFound/NotFound";
         {
           path: 'updateProfile/:id',
           element: <PrivateRoute><UpdateProfile></UpdateProfile></PrivateRoute>,
-          loader: ({params}) => fetch(`http://localhost:5000/allUsers/${params.id}`)
+          loader: ({params}) => fetch(`https://bda-server.vercel.app/allUsers/${params.id}`)
         },
       
         
@@ -120,7 +120,7 @@ import NotFound from "../pages/NotFound/NotFound";
         // {
         //   path: 'updateItem/:id',
         //   element: <AdminRoute><UpdateItem></UpdateItem></AdminRoute>,
-        //   loader: ({params}) => fetch(`http://localhost:5000/menu/${params.id}`)
+        //   loader: ({params}) => fetch(`https://bda-server.vercel.app/menu/${params.id}`)
         // },
         {
           path:'contentManagement',

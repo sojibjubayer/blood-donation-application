@@ -1,35 +1,25 @@
-import { FaAd, FaCircle, FaEnvelope, FaHome, FaList, FaReact, FaShoppingCart, FaUser, FaUtensils, FaVoicemail } from "react-icons/fa";
+import { FaAd, FaCircle,  FaHome, FaList, FaShoppingCart, FaUser } from "react-icons/fa";
 import { NavLink, Outlet } from "react-router-dom";
 import useAdmin from "../../hooks/useAdmin";
 import useDonationRequest from "../../hooks/useDonationRequest";
 import useVolunteer from "../../hooks/useVolunteer";
-import { useState } from "react";
+
 import { IoMdMenu } from "react-icons/io";
 
 const Dashboard = () => {
     const [donationRequest] = useDonationRequest()
     const [isAdmin] = useAdmin()
     const [isVolunteer] = useVolunteer()
-    const [sidebarVisible, setSidebarVisible] = useState(false);
-    const toggleSidebar = () => {
-        setSidebarVisible(!sidebarVisible);
-    };
 
     return (
         <div className="">
-             {/* Button to toggle sidebar on mobile */}
-             <button className="md:hidden" onClick={toggleSidebar}>
-             <IoMdMenu />
-            </button>
-        <div className="flex">
-           
-            {/* dashboard side bar */}
-            <div className={`${sidebarVisible ? 'block' : 'hidden md:block'}`}>
-                <div className="w-64 md:min-h-screen bg-teal-400 md:static absolute  md:mt-0">
-                    <ul className="menu p-4 ">
+          
+        <div className="flex flex-col md:flex-row">
+                <div className="md:w-64 md:min-h-screen bg-teal-400  md:mt-0">
+                    <ul className="menu p-4  ">
                         {
-                            // isVolunteerLoading? <span className="loading loading-spinner text-red-500"></span>:
-                            isAdmin || isVolunteer ? <>
+                           
+                            isAdmin || isVolunteer ?<>
                                 <li>
                                     <NavLink to="/dashboard">
                                         <FaHome></FaHome>
@@ -52,10 +42,11 @@ const Dashboard = () => {
                                 </li>
                             </>
 
-                                :
+                               :
 
                                 <>
-                                    <li>
+                                   
+                                   <li>
                                         <NavLink to="/dashboard/userHome">
                                             <FaHome></FaHome>
                                             User Home</NavLink>
@@ -66,19 +57,17 @@ const Dashboard = () => {
                                             <FaShoppingCart></FaShoppingCart>
                                             My Donation Request ({donationRequest.length})</NavLink>
                                     </li>
-                                    <li>
+                                    <li >
                                         <NavLink to="/dashboard/createDonationRequest">
                                             <FaAd></FaAd>
                                             Create Donation Request</NavLink>
                                     </li>
-
-
-
                                 </>
                         }
                         <div className="divider"></div>
                         {/* shared nav links  */}
                      
+                        <div className="grid grid-cols-2 md:grid-cols-1">
                         <li>
                             <NavLink to="/dashboard/profile">
                                 <FaUser></FaUser>
@@ -89,11 +78,12 @@ const Dashboard = () => {
                                 <FaHome></FaHome>
                                 Home</NavLink>
                         </li>
+                        </div>
+                        
 
                     </ul>
                 </div>
-            </div>
-            {/* dashboard content */}
+            
             <div className="flex-1 p-8">
                 <Outlet></Outlet>
             </div>

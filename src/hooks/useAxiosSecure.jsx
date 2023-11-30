@@ -4,7 +4,7 @@ import useAuth from '../hooks/useAuth'
 
 
 const axiosSecure = axios.create({
-    baseURL: 'http://localhost:5000'
+    baseURL: 'https://bda-server.vercel.app'
 })
 const useAxiosSecure = () => {
     const navigate=useNavigate()

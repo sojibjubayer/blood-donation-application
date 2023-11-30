@@ -19,16 +19,16 @@ const AdminHome = () => {
 
     return (
         <div>
-            <h2 className="text-3xl flex items-center gap-3">
+            <h2 className="md:text-3xl text-lg flex items-center gap-3">
                 <span>Hi,Welcome </span>
-                <div className='bg-red-200 p-2 text-2xl rounded-md'>
+                <div className='bg-red-200 p-1 md:text-2xl text-lg rounded-md'>
                     {
                         user?.displayName ? user.displayName : 'back'
                     }
                 </div>
             </h2>
 
-            <div className="stats shadow">
+            <div className="stats shadow flex flex-col md:flex-row mt-3">
 
                 <div className="stat">
                     <div className="stat-figure text-secondary">

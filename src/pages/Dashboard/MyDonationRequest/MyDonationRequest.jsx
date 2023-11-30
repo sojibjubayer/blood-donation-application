@@ -80,7 +80,7 @@ const MyDonationRequest = () => {
     return (
         <div>
             <div className="overflow-x-auto">
-                <div className="text-2xl font-bold text-center border-b-4 border-teal-400 p-2">
+                <div className="md:text-2xl text-lg font-bold text-center border-b-4 border-teal-400 p-2">
                     My Donation Request
                 </div>
                 <table className="table w-full">
@@ -157,8 +157,7 @@ const MyDonationRequest = () => {
                                     <Link to={`/dashboard/editInfo/${info._id}`}>
                                         <button
                                             className="btn btn-ghost btn-lg bg-orange-500">
-                                            <FaEdit className="text-white 
-                                        "></FaEdit>
+                                            <FaEdit  className="text-white "></FaEdit>
                                         </button>
                                     </Link>
                                 </td>

@@ -11,9 +11,6 @@ const UserHome = () => {
     const [donationRequest, refetch] = useDonationRequest();
     const axiosPublic = useAxiosPublic();
 
-
-
-
     const handleDeleteinfo = (info) => {
         console.log(info)
         Swal.fire({
@@ -71,7 +68,7 @@ const UserHome = () => {
     };
     return (
         <div>
-            <h2 className="text-3xl">
+            <h2 className="md:text-3xl text-xl">
                 <span>Hi,Welcome </span>
                 {
                     user?.displayName ? user.displayName : 'back'
@@ -81,7 +78,7 @@ const UserHome = () => {
             {
                 donationRequest?.length > 0 ?
                     <div className="overflow-x-auto">
-                        <div className="text-2xl font-bold text-center border-b-4 border-teal-400 p-2">
+                        <div className="md:text-2xl text-lg font-bold text-center border-b-4 border-teal-400 p-2">
                             My Donation Request
                         </div>
                         <table className="table w-full pt-8">

@@ -119,7 +119,7 @@ const CreateDonationRequest = () => {
             
              {
                 status!=='blocked'? <form onSubmit={handleSubmit(onSubmit)} className=" mx-auto mt-0 p-4 mb-10 rounded-lg bg-white">
-                <div className="text-2xl font-bold text-center border-b-4 border-teal-400">Create Donation Request</div>
+                <div className="md:text-2xl text-lg font-bold text-center border-b-4 border-teal-400">Create Donation Request</div>
                 <div className="form-control w-full my-6">
                     <label className="label">
                         <span className="label-text">Requester Name*</span>
