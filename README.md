@@ -1,7 +1,7 @@
 #### Blood Donation Application <br>
 Project Completion Time: 4days <br>
 Live Site: https://bda-client.web.app <br>
-Github: https://github.com/sojibjubayer/blood-donation-application <br>
+
 Features: <br>
 - Donor Registration and Management.
 -	Blood Donation Information and Resources.
