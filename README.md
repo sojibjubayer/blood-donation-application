@@ -1,8 +1,13 @@
-# React + Vite
+#### Blood Donation Application <br>
+The purpose of the Blood Donation Application is to create a user-friendly platform that
+facilitates blood donation activities. The application will connect donors with those in need of
+blood, promoting a seamless and efficient donation process.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Live Site: https://bda-client.web.app <br>
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Features: <br>
+- Donor Registration and Management.
+-	Blood Donation Information and Resources.
+-	Secure and compliant. <br>
+### Used Technology:
+- React,material UI,Daisy UI ,Node.js,Express.js,jwt,MongoDB
