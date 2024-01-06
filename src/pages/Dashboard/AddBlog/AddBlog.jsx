@@ -38,7 +38,7 @@ const AddBlog = () => {
                 status: 'draft',
               
             };
-            console.log(blog)
+        
 
             const userRes = await axiosPublic.post('/blogPost', blog);
 

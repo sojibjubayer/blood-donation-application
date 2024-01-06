@@ -11,8 +11,7 @@ const Blogs = () => {
             return res.data;
         },
     });
-    console.log(blogs)
-
+  
     return (
         <div className="pt-20">
             <div>
@@ -20,11 +19,9 @@ const Blogs = () => {
                 :
                 blogs.filter(filtered=>filtered.status==='published').map(blog=>
                 <div key={blog._id} className="border-2 border-teal-400 my-10">
-
                     <img src={blog.image} className="w-full md:h-[400px]" alt="blog image" />
                     <h2 className="text-lg md:text-2xl font-semibold my-4 text-center bg-red-200 p-1 rounded-md md:w-[50%] mx-auto">{blog.title}</h2>
                     <p className="p-3"> {blog.content} </p>
-
                 </div>
                 )}
             </div>

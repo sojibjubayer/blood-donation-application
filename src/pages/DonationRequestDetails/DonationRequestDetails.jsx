@@ -21,12 +21,11 @@ const DonationRequestDetails = () => {
             donationStatus: 'inprogress',
             donorName:user.displayName,
             donorEmail:user.email
-
         };
         console.log(requestInfo)
 
         const infoRes = await axiosPublic.patch(`/confirmDonation/${_id}`, requestInfo);
-        console.log(infoRes.data)
+        // console.log(infoRes.data)
         if (infoRes.data.modifiedCount > 0) {
           
             Swal.fire({

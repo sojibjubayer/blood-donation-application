@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import useAxiosPublic from '../hooks/useAxiosPublic';
 import { AuthContext } from '../providers/AuthProvider';
+import toast from 'react-hot-toast';
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -50,6 +51,7 @@ const Register = () => {
     const [selectedUpazila, setSelectedUpazila] = useState('default');
     const [filteredUpazilas, setFilteredUpazilas] = useState(upazilas);
     const [selectedDistrictName, setSelectedDistrictName] = useState('');
+    const [registerError,setRegisterError] = useState('')
 
    
 
@@ -71,7 +73,22 @@ const Register = () => {
   
 
     const onSubmit = async (data) => {
-        console.log(data)
+        // console.log(data)
+        setRegisterError('')
+        const password=data.password;
+        if (password.length < 6) {
+            setRegisterError('password should be al least 6 characters')
+            return;
+        }
+        else if (!/[A-Z]/.test(password)) {
+           setRegisterError('password must have one uppercase')
+             
+            return;
+        }
+        else if (!/[!@#$%^&*()_+{}[\]:;<>,.?~\\|]/.test(password)) {
+            setRegisterError('password must have a special character')
+            return;
+        }
         
         
         const imageFile = { image: data.image[0] };
@@ -217,6 +234,11 @@ const Register = () => {
                     <input type="password" placeholder="Confirm Password" {...register('confirmPassword')} className={`input input-bordered w-full ${formState.errors.confirmPassword ? 'input-error' : ''}`} />
                     {formState.errors.confirmPassword && <p className="text-error">{formState.errors.confirmPassword.message}</p>}
                 </div>
+                <div>
+                    {
+                        registerError? <p className='text-red-600 text-xs'>{registerError}</p>:''
+                    }
+                </div>
                 <div className="form-control w-full my-6">
                     <label className="label">
                         <span className="label-text">Add Your Image*</span>
@@ -224,10 +246,10 @@ const Register = () => {
                     <input {...register('image', { required: true })} type="file" className="file-input w-full max-w-xs" />
                 </div>
                 <button className="btn w-full bg-teal-600 font-bold text-xl text-orange-300 hover:text-black hover:bg-teal-600">Register</button>
-                <p className="px-6 my-3">
-                    <small>
-                        Already Registered? <Link to="/login"> Login Here</Link>{' '}
-                    </small>
+                <p className="px-6 my-4 text-sm ">
+                   
+                        Already Registered? <Link to="/login" className='text-blue-700 font-semibold'> Login Here</Link>{' '}
+                   
                 </p>
                 
             </form>

@@ -1,106 +1,79 @@
-import React, { useState } from 'react';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import { useTheme } from '@mui/material/styles';
+import { Typography } from '@mui/material';
+import useAxiosPublic from '../../hooks/useAxiosPublic';
+import Swal from 'sweetalert2';
 
-const ContactUs = () => {
-    // State to manage form input values
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        address: '',
-        query: '',
-    });
 
-    // Handler for form input changes
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
+export default function ContactUs() {
+    const axiosPublic = useAxiosPublic()
+    const theme = useTheme();
 
-    // Handler for form submission
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // You can perform any additional actions with the form data here
-        console.log('Form Data:', formData);
+    const handleSubmit = async(event) => {
+        event.preventDefault();
+
+        const requestedContact={
+            name:event.target.name.value,
+            email:event.target.email.value,
+            address:event.target.address.value,
+            query:event.target.query.value,
+        }
+
+        // console.log(requestedContact)
+
+        const res = await axiosPublic.post('/fromRequestedContact',requestedContact)
+        if (res.data.insertedId) {
+            
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Data Sent Sucessfully',
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            event.target.reset()
+           
+           
+        }
     };
 
     return (
-        <div className="max-w-md mx-auto my-8 ">
-            <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 border-2 border-teal-600">
-                <div className='text-center text-xl font-bold border-b-2 border-teal-600 mb-2'>
-                    Feel free to contact Us
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                        Name
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="name"
-                        type="text"
-                        placeholder="Your Name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                        Email
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="email"
-                        type="email"
-                        placeholder="Your Email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">
-                        Address
-                    </label>
-                    <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="address"
-                        type="text"
-                        placeholder="Your Address"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleInputChange}
-                        required
-                    />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="query">
-                        Query
-                    </label>
-                    <textarea
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="query"
-                        placeholder="Your Query"
-                        name="query"
-                        value={formData.query}
-                        onChange={handleInputChange}
-                        required
-                    ></textarea>
-                </div>
-                <div className="flex items-center justify-between">
-                    <button
-                        className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        type="submit"
-                    >
-                        Submit
-                    </button>
-                </div>
-            </form>
-        </div>
+        <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{
+                
+                    
+                    width: '35ch',
+                    [theme.breakpoints.up('md')]: {
+                        width: '45ch',
+                        maxWidth: '100%',
+                    },
+                    alignItems:'center'
+                
+            }}
+            noValidate
+            autoComplete="off" >
+            <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'teal',mb:2, borderRadius: 1 }}>
+                Feel free to contact us
+            </Typography>
+            <TextField id="name" label="Name" variant="filled" fullWidth /> <br />
+            <TextField id="email" label="Email" variant="filled" fullWidth /> <br />
+            <TextField id="address" label="Address" variant="filled" fullWidth /> <br />
+            <TextField
+                id="query"
+                label="Query"
+                multiline
+                rows={4}
+                variant="filled"
+                fullWidth
+            />
+            <Button type="submit" variant="contained" color="inherit" sx={{ mt: 2 }}>
+                Submit
+            </Button>
+        </Box>
     );
-};
-
-export default ContactUs;
+}

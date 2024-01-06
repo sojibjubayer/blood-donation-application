@@ -24,11 +24,12 @@ import AddBlog from "../pages/Dashboard/AddBlog/AddBlog";
 import Blogs from "../pages/Blogs/Blogs";
 import SearchPage from "../pages/SearchPage/SearchPage";
 import NotFound from "../pages/NotFound/NotFound";
+import Payment from "../Payment/Payment";
 
 
 
 
-  export const router = createBrowserRouter([
+export const router=createBrowserRouter([
     {
       path: "/",
       element: <Main></Main>,
@@ -64,6 +65,11 @@ import NotFound from "../pages/NotFound/NotFound";
         {
           path: 'searchDonors',
           element: <SearchPage></SearchPage>,
+          
+        },
+        {
+          path: 'fundings',
+          element: <Payment></Payment>,
           
         },
         

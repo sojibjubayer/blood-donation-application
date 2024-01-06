@@ -9,12 +9,14 @@ const Home = () => {
         <div>
             <Banner></Banner>
             <FeaturedSection></FeaturedSection>
-            <div className="flex flex-col md:flex-row mt-10 border-2 border-teal-600">
-                <div className="flex-1">
-                    <ContactInfo></ContactInfo>
-                </div>
-                <div className="flex-1 ">
+            <div className="my-16 flex flex-col md:flex-row  justify-evenly">
+                <div className="">
                     <ContactUs></ContactUs>
+
+                </div>
+                <div className="">
+                    <ContactInfo></ContactInfo>
+
                 </div>
             </div>
         </div>

@@ -3,7 +3,9 @@ import { AuthContext } from '../../providers/AuthProvider';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2'
-import SocialLogin from '../../components/SocialLogin';
+
+
+
 
 const Login = () => {
     
@@ -21,7 +23,7 @@ const Login = () => {
         const form = event.target;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(email, password);
+       
         signIn(email, password)
             .then(result => {
                 const user = result.user;
@@ -36,6 +38,16 @@ const Login = () => {
                     }
                 });
                 navigate('/');
+            })
+            .catch(error => {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "error",
+                    title: "Email or password does not match",
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+              
             })
     }
 
@@ -70,11 +82,11 @@ const Login = () => {
                                 </label>
                             </div>
                           
-                            <div className="form-control mt-6">
-                                <input className="btn btn-primary bg-teal-600" type="submit" value="Login" />
+                            <div className="form-control mt-6 ">
+                                <input className="btn hover:bg-teal-400 hover:text-xl bg-teal-600 text-lg " type="submit" value="Login" />
                             </div>
                         </form>
-                        <p className='px-6'><small>New Here? <Link to="registration"><button>Please Register</button></Link> </small></p>
+                        <p className='px-6 py-4 text-lg'><small>New Here? <Link to="/registration"><button>Please <span className='text-blue-700 font-semibold'>Register</span></button></Link> </small></p>
                        
                     </div>
                 </div>

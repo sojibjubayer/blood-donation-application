@@ -1,21 +1,17 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../../providers/AuthProvider";
-
-// import { FaShoppingCart } from 'react-icons/fa';
 import useAdmin from "../../../hooks/useAdmin";
 import logo from '../../../assets/logo1.png'
 import { FaHome } from "react-icons/fa";
 import useVolunteer from "../../../hooks/useVolunteer";
-import useAxiosPublic from "../../../hooks/useAxiosPublic";
-import { useQuery } from "react-query";
+
 
 const NavBar = () => {
     const { user, logOut } = useContext(AuthContext);
     const [isAdmin] = useAdmin()
     const [isVolunteer] = useVolunteer()
    
-
 
     const handleLogOut = () => {
         logOut()
@@ -24,22 +20,36 @@ const NavBar = () => {
     }
 
     const navOptions = <>
-        <li><Link to="/donationRequest">Donation Request</Link></li>
-        <li><Link to="/blogs">Blog</Link></li>
+        <li><NavLink to="/donationRequest" className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? " bg-teal-400 rounded-lg p-2 text-black " : ""
+        }> Donation Request</NavLink></li>
+        <li><NavLink to="/blogs" className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? " bg-teal-400 rounded-lg p-2 text-black " : ""
+        }> Blog </NavLink></li>
         {
-            user && isAdmin && !isVolunteer && <li><Link to="/dashboard">Dashboard</Link></li>
+            user && isAdmin && !isVolunteer && <li><NavLink to="/dashboard" className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? " bg-teal-400 rounded-lg p-2 text-black " : ""
+        }>Dashboard</NavLink></li>
         }
         {
-            user && !isAdmin && isVolunteer && <li><Link to="/dashboard">Dashboard</Link></li>
+            user && !isAdmin && isVolunteer && <li><NavLink to="/dashboard" className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? " bg-teal-400 rounded-lg p-2 text-black " : ""
+        }>Dashboard</NavLink></li>
         }
         {
-            user &&  <li><Link to="/fundings">Fundings</Link></li>
+            user &&  <li><NavLink to="/fundings" className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? " bg-teal-400 rounded-lg p-2 text-black " : ""
+        }>Fundings</NavLink></li>
         }
         {
-            (user && !isAdmin && !isVolunteer) && <li><Link to="/dashboard/userHome">Dashboard</Link></li>
+            (user && !isAdmin && !isVolunteer) && <li><NavLink to="/dashboard/userHome" className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? " bg-teal-400 rounded-lg p-2 text-black " : ""
+        }>Dashboard</NavLink></li>
         }
         {
-            !user && <li><Link to="/registration">Registration</Link></li>
+            !user && <li><NavLink to="/registration" className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? " bg-teal-400 rounded-lg p-2 text-black " : ""
+        }>Registration</NavLink></li>
         }
 
 
@@ -48,7 +58,9 @@ const NavBar = () => {
                 {/* <span>{user?.displayName}</span> */}
                 <button onClick={handleLogOut} className="">Logout</button>
             </> : <>
-                <li><Link to="/login">Login</Link></li>
+                <li><NavLink to="/login" className={({ isActive, isPending }) =>
+            isPending ? "pending" : isActive ? " bg-teal-400 rounded-lg p-2 text-black " : ""
+        }>Login</NavLink></li>
             </>
         }
     </>
@@ -77,12 +89,17 @@ const NavBar = () => {
                     </div>
                 </div>
                 <div className="navbar-center hidden lg:flex">
-                    <ul className="menu menu-horizontal px-1">
+                    <ul className="flex gap-4 px-1">
                         {navOptions}
                     </ul>
                 </div>
-                <div className="navbar-end">
-                    <a className="">{user?.displayName}</a>
+                <div className="navbar-end ">
+                   
+                    {
+                        user?.displayName? <button className="btn md:btn-md btn-sm rounded-2xl hover:bg-teal-400 bg-teal-400">
+                        <a className="">{user?.displayName}</a>
+                        </button>:''
+                    }
                 </div>
             </div>
         </>

@@ -12,8 +12,10 @@ import image4 from '../../../assets/card4.jpg'
 
 const FeaturedSection = () => {
     return (
-        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap', marginTop: 4 }}>
-            <Card sx={{ maxWidth: 545 }}>
+        <Box sx={{ display: 'flex',flexDirection:'column', '@media (min-width:600px)': {
+            flexDirection: 'row',
+          }, gap: 2, justifyContent: 'center',  marginTop: 4 }}>
+            <Card >
                 <CardMedia
                     sx={{ height: 140 }}
                     image={image1}
@@ -31,7 +33,7 @@ const FeaturedSection = () => {
                 </CardContent>
 
             </Card>
-            <Card sx={{ maxWidth: 545 }}>
+            <Card >
                 <CardMedia
                     sx={{ height: 140 }}
                     image={image2}
@@ -48,7 +50,7 @@ const FeaturedSection = () => {
                 </CardContent>
 
             </Card>
-            <Card sx={{ maxWidth: 545 }}>
+            <Card >
                 <CardMedia
                     sx={{ height: 140 }}
                     image={image3}
@@ -66,7 +68,7 @@ const FeaturedSection = () => {
 
             </Card>
 
-            <Card sx={{ maxWidth: 545 }}>
+            <Card >
                 <CardMedia
                     sx={{ height: 140 }}
                     image={image4}
